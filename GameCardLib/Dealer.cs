@@ -6,26 +6,18 @@ using System.Threading.Tasks;
 
 namespace GameCardLib
 {
-    internal class Player
+    internal class Dealer
     {
+        private string name;
 
         public Hand Hand { get; set; }
         public bool IsFinished { get; set; }
         public bool Winner { get; set; }
-        public string Name { get; set; }
-        public string PlayerID { get; set; }
 
 
-        public Player(string id, string name, Hand hand)
+        public Dealer(Hand hand)
         {
-            
+            name = "Croupier";
         }
-
-
-        public override string ToString()
-        {
-            return string.Empty;
-        }
-
     }
 }

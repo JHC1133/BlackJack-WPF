@@ -21,6 +21,11 @@ namespace GameCardLib
             
         }
 
+        public Deck(List<Card> cardList, List<Card> secondCardList)
+        {
+            
+        }
+
         private void AddCard(Card card)
         {
 
