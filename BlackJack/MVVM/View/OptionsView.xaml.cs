@@ -18,9 +18,9 @@ namespace BlackJack.MVVM.View
     /// <summary>
     /// Interaction logic for HomeView.xaml
     /// </summary>
-    public partial class HomeView : UserControl
+    public partial class OptionsView : UserControl
     {
-        public HomeView()
+        public OptionsView()
         {
             InitializeComponent();
         }

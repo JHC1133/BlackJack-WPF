@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameCardLib
 {
-    internal class GameManager
+    public class GameManager
     {
         RulesCheck check;
         Dealer dealer;
@@ -14,10 +14,11 @@ namespace GameCardLib
 
         List<Player> players;
 
-        int numberOfPlayers;
+        int _numberOfPlayers;
 
-        public GameManager()
+        public GameManager(int argNumberOfPlayers, int argNumberOfDecks)
         {
+
             List<Card> standardDeck = CreateStandardDeck();
 
             dealer = new Dealer();

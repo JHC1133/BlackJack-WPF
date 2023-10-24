@@ -11,4 +11,8 @@
     <Folder Include="MVVM\Model\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameCardLib\GameCardLib.csproj" />
+  </ItemGroup>
+
 </Project>

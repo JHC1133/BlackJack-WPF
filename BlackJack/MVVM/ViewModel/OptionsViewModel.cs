@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlackJack.MVVM.ViewModel
 {
-    class HomeViewModel
+    class OptionsViewModel
     {
     }
 }

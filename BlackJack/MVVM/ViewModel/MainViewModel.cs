@@ -9,10 +9,10 @@ namespace BlackJack.MVVM.ViewModel
 {
     class MainViewModel : ObservableObject
     {
-        public RelayCommand HomeViewCommand { get; set; }
+        public RelayCommand OptionsViewCommand { get; set; }
         public RelayCommand PlayViewCommand { get; set; }
 
-        public HomeViewModel HomeVM { get; set; }
+        public OptionsViewModel OptionsVM { get; set; }
         public PlayViewModel PlayVM { get; set; }
 
         private object _currentView;
@@ -29,13 +29,13 @@ namespace BlackJack.MVVM.ViewModel
 
         public MainViewModel()
         {
-            HomeVM = new HomeViewModel();
+            OptionsVM = new OptionsViewModel();
             PlayVM = new PlayViewModel();
-            CurrentView = HomeVM;
+            CurrentView = OptionsVM;
 
-            HomeViewCommand = new RelayCommand(o =>
+            OptionsViewCommand = new RelayCommand(o =>
             {
-                CurrentView = HomeVM;
+                CurrentView = OptionsVM;
             });
 
             PlayViewCommand = new RelayCommand(o =>
