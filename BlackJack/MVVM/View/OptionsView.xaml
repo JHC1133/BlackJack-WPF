@@ -8,6 +8,22 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
 
+    <UserControl.Resources>
+        <Style TargetType="TextBox" x:Key="RoundedTextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <StackPanel>
         <TextBlock Text="Set up your game"
                    Foreground="White"
@@ -21,14 +37,14 @@
                    HorizontalAlignment="Left"
                    Margin="20,0,0,5"/>
 
-        <TextBox x:Name="NumberOfPlayers"
+        <TextBox x:Name="txtNumberOfPlayers"
                  Margin="20,0,0,10"
                  Width="100"
                  Height="20"
-                 HorizontalAlignment="Left"  
-
-                 Style="{StaticResource OptionsTextBox}">
+                 HorizontalAlignment="Left"
+                 Style="{DynamicResource OptionsTextBox}">
             
+
         </TextBox>
 
         <TextBlock Text="Number of decks (1-4)"
@@ -37,14 +53,27 @@
                    HorizontalAlignment="Left"
                    Margin="20,0,0,5"/>
 
-        <TextBox x:Name="NumberOfDecks"
-                 Margin="20,0,0,0"
+        <TextBox x:Name="txtNumberOfDecks"
+                 Margin="20,0,0,10"
                  Width="100"
                  Height="20"
                  HorizontalAlignment="Left"
+                 IsEnabled="True"
                  Style="{StaticResource OptionsTextBox}">
+
             
         </TextBox>
+
+        <Button x:Name="btnOptionsSave"
+                Content="Save"
+                Width="100"
+                Height="20"
+                HorizontalAlignment="Left"
+                Margin="20,0,0,0"
+                Style="{StaticResource BasicButton}" 
+                Click="btnOptionsSave_Click">
+            
+        </Button>
     </StackPanel>
         
 </UserControl>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameCardLib
+namespace GameCardLibrary
 {
 	/// <summary>
 	/// Every suit in the deck

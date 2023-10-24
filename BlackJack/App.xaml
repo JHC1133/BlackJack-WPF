@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Theme/MenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/TextBoxTheme.xaml"/>
+                <ResourceDictionary Source="Theme/BasicButtonTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModel:OptionsViewModel}">
@@ -20,6 +21,7 @@
                 <view:PlayView/>
             </DataTemplate>
 
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

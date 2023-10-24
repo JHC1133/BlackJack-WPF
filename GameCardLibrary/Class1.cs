@@ -1,6 +1,6 @@
 using System;
 
-namespace UtilitiesLib
+namespace GameCardLibrary
 {
     public class Class1
     {

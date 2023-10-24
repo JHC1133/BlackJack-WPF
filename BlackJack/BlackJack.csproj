@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameCardLib\GameCardLib.csproj" />
+    <ProjectReference Include="..\GameCardLibrary\GameCardLibrary.csproj" />
   </ItemGroup>
 
 </Project>

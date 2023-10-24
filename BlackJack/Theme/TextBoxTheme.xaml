@@ -4,6 +4,7 @@
 
     <Style TargetType="{x:Type TextBox}"
            x:Key="OptionsTextBox">
+        <Setter Property="TextAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
@@ -12,14 +13,14 @@
                         <Grid>
                             <Rectangle StrokeThickness="1"/>
                             <TextBox Margin="1"
-                                     Text="{TemplateBinding Text}"
                                      TextAlignment="Center"
                                      BorderThickness="0"
                                      Background="Transparent"
-                                     VerticalContentAlignment="Center"
                                      Padding="0"
                                      Foreground="DimGray"
-                                     x:Name="OptionsBox"/>
+                                     x:Name="OptionsBox"
+                                     IsEnabled="True"/>
+                            <ScrollViewer x:Name="PART_ContentHost" />
                         </Grid>
                         
                     </Border>

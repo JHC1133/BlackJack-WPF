@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace BlackJack
         public MainWindow()
         {
             InitializeComponent();
+            Debug.WriteLine("An instance of MainWindow was created");
         }
     }
 }

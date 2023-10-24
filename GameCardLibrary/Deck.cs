@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL;
 
-namespace GameCardLib
+namespace GameCardLibrary
 {
     internal class Deck
     {
@@ -41,25 +41,25 @@ namespace GameCardLib
 
         }
 
-        private List<Card> GetTwoCards()
-        {
+        //private List<Card> GetTwoCards()
+        //{
 
-        }
+        //}
 
         private int SumOfCards()
         {
-
+            return 0;
         }
 
         private int NumberOfCards()
         {
-
+            return 0;
         }
 
-        private Card GetAt(int position)
-        {
-
-        }
+        //private Card GetAt(int position)
+        //{
+            
+        //}
 
         private void InitializeDeck(List<Card> cardList)
         {

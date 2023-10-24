@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameCardLib
+namespace GameCardLibrary
 {
     public class GameManager
     {
@@ -21,7 +21,7 @@ namespace GameCardLib
 
             List<Card> standardDeck = CreateStandardDeck();
 
-            dealer = new Dealer();
+            //dealer = new Dealer();
             deck = new Deck(standardDeck);
         }
 
