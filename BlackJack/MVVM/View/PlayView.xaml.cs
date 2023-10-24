@@ -1,4 +1,5 @@
-﻿using GameCardLibrary;
+﻿using BlackJack.MVVM.ViewModel;
+using GameCardLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,8 @@ namespace BlackJack.MVVM.View
         public PlayView()
         {
             InitializeComponent();
+
+            DataContext = new PlayViewModel();
         }
     }
 }

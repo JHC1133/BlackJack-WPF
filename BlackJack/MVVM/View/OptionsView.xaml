@@ -4,26 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BlackJack.MVVM.View"
+             xmlns:viewmodel="clr-namespace:BlackJack.MVVM.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-
-    <UserControl.Resources>
-        <Style TargetType="TextBox" x:Key="RoundedTextBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="5">
-                            <ScrollViewer x:Name="PART_ContentHost" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </UserControl.Resources>
+    <UserControl.DataContext>
+        <viewmodel:OptionsViewModel/>
+    </UserControl.DataContext>
+    
     <StackPanel>
         <TextBlock Text="Set up your game"
                    Foreground="White"

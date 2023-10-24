@@ -1,4 +1,5 @@
 ﻿using BlackJack.Core;
+using GameCardLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace BlackJack.MVVM.ViewModel
 {
     class MainViewModel : ObservableObject
     {
+        #region MVVM
         public RelayCommand OptionsViewCommand { get; set; }
         public RelayCommand PlayViewCommand { get; set; }
 
@@ -23,15 +25,19 @@ namespace BlackJack.MVVM.ViewModel
             set
             {
                 _currentView = value;
-                OnPropertyCanged();
+                OnPropertyChanged();
             }
         }
+        #endregion
+
 
         public MainViewModel()
         {
+
             OptionsVM = new OptionsViewModel();
             PlayVM = new PlayViewModel();
-            CurrentView = OptionsVM;
+
+            CurrentView = OptionsVM; // Setting the default view
 
             OptionsViewCommand = new RelayCommand(o =>
             {

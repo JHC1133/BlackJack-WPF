@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BlackJack.MVVM.ViewModel;
 using GameCardLibrary;
 using UtilitiesLib;
 
@@ -30,7 +31,7 @@ namespace BlackJack.MVVM.View
             InitializeComponent();
 
             
-            DataContext = SharedData.Instance;
+            DataContext = new OptionsViewModel();
         }
 
         private bool IsOptionsTextBoxesFilled()

@@ -16,13 +16,18 @@ namespace GameCardLibrary
 
         int _numberOfPlayers;
 
-        public GameManager(int argNumberOfPlayers, int argNumberOfDecks)
+        public GameManager()
         {
 
             List<Card> standardDeck = CreateStandardDeck();
 
             //dealer = new Dealer();
             deck = new Deck(standardDeck);
+        }
+
+        public void AddNumberOfPlayers(int numberOfPlayers)
+        {
+            _numberOfPlayers = numberOfPlayers;
         }
 
         private void InitializePlayers(int numberOfPlayers)
