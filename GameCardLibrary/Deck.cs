@@ -21,6 +21,11 @@ namespace GameCardLibrary
             _cards = cardList;
         }
 
+        /// <summary>
+        /// Draws a card from the decks availabe, as well as removing drawn card from the deck
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidCastException"></exception>
         public Card DrawCard()
         {
             if (_cards.Count > 0)

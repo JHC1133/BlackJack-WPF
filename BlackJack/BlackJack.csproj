@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="MVVM\Model\" />
+    <Folder Include="Assets\" />
   </ItemGroup>
 
   <ItemGroup>

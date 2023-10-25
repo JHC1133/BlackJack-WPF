@@ -10,11 +10,13 @@ namespace GameCardLibrary
     public class GameManager
     {
         RulesCheck check;
-        Dealer dealer;
-        Deck deck;
+        Dealer _dealer;
+        Deck _deck;
 
         List<Player> _players;
         List<Deck> _decks;
+
+        Random rand;
 
         private int _numberOfPlayers;
         private int _numberOfDecks;
@@ -42,11 +44,12 @@ namespace GameCardLibrary
 
         private GameManager()
         {
+            rand = new Random();
 
             List<Card> standardDeck = CreateStandardDeck();
 
-            //dealer = new Dealer();
-            deck = new Deck(standardDeck);
+            //_dealer = new Dealer();
+            _deck = new Deck(standardDeck);
         }
 
         public void InitilizeGame(int numberOfDecks, int numberOfPlayers)
@@ -55,6 +58,7 @@ namespace GameCardLibrary
             SetNumberOfDecks(numberOfDecks);
             InitializeGameDeck(numberOfDecks);
             InitializePlayers(numberOfPlayers);
+            InitializeDealer();
         }
 
         private void SetNumberOfPlayers(int numberOfPlayers)
@@ -79,23 +83,33 @@ namespace GameCardLibrary
 
             for (int i = 0; i < _numberOfPlayers; i++)
             {
-
+                int randomDeckValue = rand.Next(0, 3);
                 Hand playerHand = new Hand();
 
                 // Draws two cards from the deck and adds them to the player's hand
-                playerHand.AddCard(_decks[i].DrawCard());
-                playerHand.AddCard(_decks[i].DrawCard());
+                playerHand.AddCard(_decks[randomDeckValue].DrawCard());
+                playerHand.AddCard(_decks[randomDeckValue].DrawCard());
 
                 Player player = new Player(playerHand);
 
                 _players.Add(player);
 
                 Debug.WriteLine($"Game is created with Player {_players[i].Name} using cards with value {_players[i].Hand.Score} on hand ");
-                Debug.WriteLine("Current cards: " + _players[i].Hand.PrintCurrentCards());
+                Debug.WriteLine("Current cards: " + _players[i].Hand.ToString());
             }
 
             Debug.WriteLine("Players initialized with: " + _numberOfPlayers);
             
+        }
+
+        private void InitializeDealer()
+        {
+            int randomDeckValue = rand.Next(0, 3);
+            Hand dealerHand = new Hand();
+
+            dealerHand.AddCard(_decks[randomDeckValue].DrawCard());
+            dealerHand.AddCard(_decks[randomDeckValue].DrawCard());
+            _dealer = new Dealer(dealerHand);
         }
 
         /// <summary>

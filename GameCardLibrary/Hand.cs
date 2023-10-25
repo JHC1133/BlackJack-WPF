@@ -14,25 +14,14 @@ namespace GameCardLibrary
 
         public Card LastCard { get; }
         public int NumberOfCards { get; }
-        public int Score => CalculateScore();
-
-        private int CalculateScore()
-        {
-            int score = 0;
-
-            foreach (Card card in _cards)
-            {
-                score += card.GetCardValue();
-            }
-            return score;
-        }
+        public int Score => CalculateHandValue(); // Lambda?
 
         public Hand()
         {
             _cards = new List<Card>();
         }
 
-        public int CalculateHandValue()
+        private int CalculateHandValue()
         {
             int value = 0;
             int numberOfAces = 0;
@@ -71,7 +60,7 @@ namespace GameCardLibrary
             _cards.Clear();
         }
 
-        public string PrintCurrentCards()
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
 
@@ -81,11 +70,6 @@ namespace GameCardLibrary
             }
 
             return sb.ToString();
-        }
-
-        public override string ToString()
-        {
-            return string.Empty;
         }
     }
 }

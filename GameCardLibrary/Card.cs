@@ -11,6 +11,7 @@ namespace GameCardLibrary
 
         public Suit Suit { get; set; }
         public Value Value { get; set; }
+        public string ImagePath { get; set; }
 
         public Card(Suit suit, Value value)
         {
@@ -23,6 +24,10 @@ namespace GameCardLibrary
             if (Value == Value.Jack || Value == Value.Queen || Value == Value.King)
             {
                 return 10;
+            }
+            else if (Value == Value.Ace)
+            {
+                return 11;
             }
             return (int)Value;
         }
