@@ -62,27 +62,31 @@ namespace BlackJack.MVVM.View
 
         private void btnOptionsSave_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("OptionsSaveButton Clicked");
-            if (IsOptionsTextBoxesFilled())
-            {
-                Debug.WriteLine("txtPlayers: " + txtNumberOfPlayers.Text);
-                Debug.WriteLine("txtDecks: " + txtNumberOfDecks.Text);
-                if (TryParseOptionsTextBoxes(out int numberOfDecks, out int numberOfPlayers))
-                {
-                    SharedData.Instance.NumberOfDecks = numberOfDecks;
-                    SharedData.Instance.NumberOfPlayers = numberOfPlayers;
+            //Debug.WriteLine("OptionsSaveButton Clicked");
+            //if (IsOptionsTextBoxesFilled())
+            //{
+            //    Debug.WriteLine("txtPlayers: " + txtNumberOfPlayers.Text);
+            //    Debug.WriteLine("txtDecks: " + txtNumberOfDecks.Text);
+            //    if (TryParseOptionsTextBoxes(out int numberOfDecks, out int numberOfPlayers))
+            //    {
+            //        SharedData.Instance.NumberOfDecks = numberOfDecks;
+            //        SharedData.Instance.NumberOfPlayers = numberOfPlayers;
 
-                    ClearTextBoxes();
-                }
-                else
-                {
-                    MessageBox.Show("Please use valid integers as input");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please fill in both textboxes");
-            }
+            //        ClearTextBoxes();
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("Please use valid integers as input");
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Please fill in both textboxes");
+            //}
+            Debug.WriteLine("Button clicked");
+
+            ((OptionsViewModel)DataContext).SaveCommand.Execute(null);
+
         }
     }
 }

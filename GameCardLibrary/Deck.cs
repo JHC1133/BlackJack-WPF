@@ -10,7 +10,7 @@ namespace GameCardLibrary
     internal class Deck
     {
 
-        ListManager<Card> cards;
+        private List<Card> _cards;
 
         Random randomArranger;
 
@@ -18,42 +18,49 @@ namespace GameCardLibrary
 
         public Deck(List<Card> cardList)
         {
-            
+            _cards = cardList;
         }
 
-        public Deck(List<Card> cardList, List<Card> secondCardList)
+        public Card DrawCard()
         {
-            
+            if (_cards.Count > 0)
+            {
+                Card drawnCard = _cards[0];
+                _cards.RemoveAt(0);
+                return drawnCard;
+            }
+            else
+            {
+                throw new InvalidCastException("The deck is empty");
+            }
         }
-
-        private void AddCard(Card card)
-        {
-
-        }
-
-        private void RemoveCard(int pos)
-        {
-
-        }
-
         private void DiscardCards()
         {
 
         }
 
-        //private List<Card> GetTwoCards()
-        //{
-
-        //}
-
-        private int SumOfCards()
+        /// <summary>
+        /// Using a Fisher-Yates style shuffle
+        /// </summary>
+        public void Shuffle()
         {
-            return 0;
+            Random rand = new Random();
+
+            int n = _cards.Count;
+
+            while (n > 1)
+            {
+                n--;
+                int k = rand.Next(n + 1);
+                Card temp = _cards[k];
+                _cards[k] = _cards[n];
+                _cards[n] = temp;
+            }
         }
 
         private int NumberOfCards()
         {
-            return 0;
+            return _cards.Count;
         }
 
         //private Card GetAt(int position)

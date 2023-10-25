@@ -26,11 +26,12 @@
                    Margin="20,0,0,5"/>
 
         <TextBox x:Name="txtNumberOfPlayers"
+                 Text="{Binding NumberOfPlayers}"
                  Margin="20,0,0,10"
                  Width="100"
                  Height="20"
                  HorizontalAlignment="Left"
-                 Style="{DynamicResource OptionsTextBox}">
+                 Style="{StaticResource OptionsTextBox}">
             
 
         </TextBox>
@@ -42,6 +43,7 @@
                    Margin="20,0,0,5"/>
 
         <TextBox x:Name="txtNumberOfDecks"
+                 Text="{Binding NumberOfDecks}"
                  Margin="20,0,0,10"
                  Width="100"
                  Height="20"
@@ -58,7 +60,7 @@
                 Height="20"
                 HorizontalAlignment="Left"
                 Margin="20,0,0,0"
-                Style="{StaticResource BasicButton}" 
+                Style="{StaticResource BasicButton}"
                 Click="btnOptionsSave_Click">
             
         </Button>

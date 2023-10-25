@@ -10,6 +10,7 @@ namespace BlackJack.MVVM.ViewModel
 {
     class PlayViewModel : ObservableObject
     {
+        GameManager _gameManager = GameManager.Instance;
 
         public PlayViewModel()
         {

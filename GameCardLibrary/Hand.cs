@@ -8,8 +8,9 @@ namespace GameCardLibrary
 {
     internal class Hand
     {
+        private List<Card> _cards;
 
-        Deck deck;
+        Deck _deck;
 
         public Card LastCard { get; }
         public int NumberOfCards { get; }
@@ -17,17 +18,17 @@ namespace GameCardLibrary
 
         public Hand(Deck deck)
         {
-            
+            _deck = deck;
         }
 
-        private void AddCard(Card card)
+        public void AddCard(Card card)
         {
-
+            _cards.Add(card);
         }
 
         private void Clear()
         {
-
+            _cards.Clear();
         }
 
         public override string ToString()

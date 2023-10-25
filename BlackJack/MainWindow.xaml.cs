@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlackJack.MVVM.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace BlackJack
         {
             InitializeComponent();
             Debug.WriteLine("An instance of MainWindow was created");
+            DataContext = new MainViewModel();
         }
     }
 }

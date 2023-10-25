@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BlackJack.MVVM.ViewModel
 {
@@ -36,9 +37,8 @@ namespace BlackJack.MVVM.ViewModel
 
             OptionsVM = new OptionsViewModel();
             PlayVM = new PlayViewModel();
-
             CurrentView = OptionsVM; // Setting the default view
-
+           
             OptionsViewCommand = new RelayCommand(o =>
             {
                 CurrentView = OptionsVM;
