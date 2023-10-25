@@ -80,10 +80,18 @@ namespace GameCardLibrary
             for (int i = 0; i < _numberOfPlayers; i++)
             {
 
-                Hand playerHand = new Hand(_decks[i]);
-                _players.Add(new Player(playerHand));
+                Hand playerHand = new Hand();
 
-                Debug.WriteLine($"Game is created with Player {_players[i].Name} using cards {_players[i].Hand.NumberOfCards} on hand ");
+                // Draws two cards from the deck and adds them to the player's hand
+                playerHand.AddCard(_decks[i].DrawCard());
+                playerHand.AddCard(_decks[i].DrawCard());
+
+                Player player = new Player(playerHand);
+
+                _players.Add(player);
+
+                Debug.WriteLine($"Game is created with Player {_players[i].Name} using cards with value {_players[i].Hand.Score} on hand ");
+                Debug.WriteLine("Current cards: " + _players[i].Hand.PrintCurrentCards());
             }
 
             Debug.WriteLine("Players initialized with: " + _numberOfPlayers);
@@ -100,10 +108,14 @@ namespace GameCardLibrary
 
             for (int i = 0; i < _numberOfDecks; i++)
             {
-                _decks.Add(new Deck(CreateStandardDeck()));
+                Deck deck;
+                _decks.Add(deck = new Deck(CreateStandardDeck()));
 
+                deck.Shuffle();
                 Debug.WriteLine($"Deck content: {_decks[i].ToString()}");
             }
+
+            
         }
 
         private List<Card> CreateStandardDeck()
@@ -114,10 +126,14 @@ namespace GameCardLibrary
             {
                 foreach (Value value in Enum.GetValues(typeof(Value)))
                 {
-                    deck.Add(new Card(suit, value));
+                    Card card;
+                    deck.Add(card = new Card(suit, value));
+
+                    Debug.WriteLine(card.ToString());
                 }
             }
 
+            
             return deck;
         }
     }

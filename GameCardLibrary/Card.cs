@@ -14,12 +14,22 @@ namespace GameCardLibrary
 
         public Card(Suit suit, Value value)
         {
-            
+            Suit = suit;
+            Value = value;
+        }
+
+        public int GetCardValue()
+        {
+            if (Value == Value.Jack || Value == Value.Queen || Value == Value.King)
+            {
+                return 10;
+            }
+            return (int)Value;
         }
 
         public override string ToString()
         {
-            return string.Empty;
+            return $"{Value} {this.GetCardValue()} of {Suit}";
         }
     }
 }

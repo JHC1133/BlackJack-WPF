@@ -34,9 +34,21 @@ namespace GameCardLibrary
                 throw new InvalidCastException("The deck is empty");
             }
         }
-        private void DiscardCards()
-        {
 
+        public List<Card> GetTwoCards()
+        {
+            if (_cards.Count < 2)
+            {
+                throw new InvalidOperationException("There's not enough cards in the deck");
+            }
+
+            List<Card> twoCards = new List<Card> { DrawCard(), DrawCard() };
+            return twoCards;
+        }
+
+        public void DiscardCards()
+        {
+            _cards.Clear();
         }
 
         /// <summary>
@@ -63,10 +75,7 @@ namespace GameCardLibrary
             return _cards.Count;
         }
 
-        //private Card GetAt(int position)
-        //{
-            
-        //}
+        
 
         private void InitializeDeck(List<Card> cardList)
         {

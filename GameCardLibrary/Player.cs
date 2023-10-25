@@ -25,17 +25,20 @@ namespace GameCardLibrary
         private string _name;
         private int _playerID;
 
+        private Hand _hand;
 
-        public Hand Hand { get; set; }
+
         public bool IsFinished { get; set; }
         public bool Winner { get; set; }
         public string Name { get => _name; }
         public int PlayerID { get => _playerID; }
+        public Hand Hand { get => _hand; set => _hand = value; }
 
         public Player(Hand hand)
         {
             _name = RandomizeName();
             _playerID++;
+            _hand = hand;
         }
 
         private string RandomizeName()
