@@ -50,10 +50,11 @@ namespace GameCardLibrary
         private GameManager()
         {
             rand = new Random();
-            _numberOfDecks = 1;
-            _numberOfPlayers = 1;
+            //_numberOfDecks = 1;
+            //_numberOfPlayers = 1;
         }
 
+        #region Setters and Initializers
         public void InitilizeGame(int numberOfDecks, int numberOfPlayers)
         {
             SetNumberOfPlayers(numberOfPlayers);
@@ -175,5 +176,31 @@ namespace GameCardLibrary
             
             return deck;
         }
+
+        #endregion
+
+        #region GameMechanics
+
+        public void Hit(Player player)
+        {
+            int randomDeckValue = rand.Next(0, _numberOfDecks - 1);
+
+            foreach (Player playerInList in _players)
+            {
+                if (player == playerInList)
+                {
+                    if (playerInList.Hand.Score !>= 21)
+                    {
+                        playerInList.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+                    }
+                    
+                }
+            }
+
+            
+        }
+
+        #endregion
+
     }
 }
