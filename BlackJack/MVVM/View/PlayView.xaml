@@ -95,7 +95,6 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
 
-
                             <!-- Hand Value -->
                             <TextBlock Text="{Binding Hand.Score}"
                                        Foreground="White"
