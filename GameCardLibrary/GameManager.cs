@@ -41,15 +41,11 @@ namespace GameCardLibrary
 
         public int NumberOfPlayers { get => _numberOfPlayers; }
         public int NumberOfDecks { get => _numberOfDecks; }
+        public Dealer Dealer { get => _dealer; set => _dealer = value; }
 
         private GameManager()
         {
             rand = new Random();
-
-            List<Card> standardDeck = CreateStandardDeck();
-
-            //_dealer = new Dealer();
-            _deck = new Deck(standardDeck);
         }
 
         public void InitilizeGame(int numberOfDecks, int numberOfPlayers)
@@ -91,9 +87,10 @@ namespace GameCardLibrary
                 playerHand.AddCard(_decks[randomDeckValue].DrawCard());
 
                 Player player = new Player(playerHand);
-
                 _players.Add(player);
 
+
+                //Debugging
                 Debug.WriteLine($"Game is created with Player {_players[i].Name} using cards with value {_players[i].Hand.Score} on hand ");
                 Debug.WriteLine("Current cards: " + _players[i].Hand.ToString());
             }
@@ -109,7 +106,11 @@ namespace GameCardLibrary
 
             dealerHand.AddCard(_decks[randomDeckValue].DrawCard());
             dealerHand.AddCard(_decks[randomDeckValue].DrawCard());
-            _dealer = new Dealer(dealerHand);
+            Dealer = new Dealer(dealerHand);
+
+            //Debugging
+            Debug.WriteLine($"Game is created with Player {Dealer.Name} using cards with value {Dealer.Hand.Score} on hand ");
+            Debug.WriteLine("Current cards: " + Dealer.Hand.ToString());
         }
 
         /// <summary>
@@ -126,7 +127,9 @@ namespace GameCardLibrary
                 _decks.Add(deck = new Deck(CreateStandardDeck()));
 
                 deck.Shuffle();
-                Debug.WriteLine($"Deck content: {_decks[i].ToString()}");
+
+                //Debugging
+                //Debug.WriteLine($"Deck content: {_decks[i].ToString()}");
             }
 
             

@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GameCardLibrary
 {
-    internal class Dealer
+    public class Dealer
     {
-        private string name;
+        private string _name;
+        private Hand _hand;
 
-        public Hand Hand { get; set; }
+        
         public bool IsFinished { get; set; }
         public bool Winner { get; set; }
-
+        public string Name { get => _name; set => _name = value; }
+        public Hand Hand { get => _hand; set => _hand = value; }
 
         public Dealer(Hand hand)
         {
-            name = "Croupier";
+            Name = "Croupier";
+            _hand = hand;
         }
     }
 }

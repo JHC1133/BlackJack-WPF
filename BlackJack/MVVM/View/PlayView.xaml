@@ -27,12 +27,23 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ItemsControl x:Name="itmsDealer"
-                      Grid.Column="1"
-                      Grid.ColumnSpan="2">
+        <ItemsControl Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      ItemsSource="{Binding GameManager.Dealer.Hand.ObservableHandCollection}">
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding ImagePath}"/>
+                        <TextBlock Text="{Binding BoundText1}"/>
+                    </StackPanel>
+                    
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
             
         </ItemsControl>
-        
+
+
         
     </Grid>
 </UserControl>

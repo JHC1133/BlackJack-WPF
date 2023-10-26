@@ -1,4 +1,5 @@
 ﻿using BlackJack.Core;
+using BlackJack.MVVM.View;
 using GameCardLibrary;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace BlackJack.MVVM.ViewModel
 
             OptionsVM = new OptionsViewModel();
             PlayVM = new PlayViewModel();
+
             CurrentView = OptionsVM; // Setting the default view
            
             OptionsViewCommand = new RelayCommand(o =>
