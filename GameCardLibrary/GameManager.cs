@@ -189,7 +189,7 @@ namespace GameCardLibrary
             {
                 if (player == playerInList)
                 {
-                    if (playerInList.Hand.Score !>= 21)
+                    if (playerInList.Hand.Score < 21)
                     {
                         playerInList.Hand.AddCard(_decks[randomDeckValue].DrawCard());
                     }

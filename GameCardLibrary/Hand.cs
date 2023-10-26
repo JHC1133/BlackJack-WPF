@@ -27,7 +27,7 @@ namespace GameCardLibrary
             _observableHandCollection = new ObservableCollection<Card>();
         }
 
-        private int CalculateHandValue()
+        public int CalculateHandValue()
         {
             int value = 0;
             int numberOfAces = 0;

@@ -17,10 +17,12 @@ namespace BlackJack.MVVM.ViewModel
         GameManager _gameManager = GameManager.Instance;
         private int _numberOfPlayers = 4;
         private int _numberOfDecks = 4;
+
         private int _minNumberOfPlayers = 2;
         private int _maxNumberOfPlayers = 4;
         private int _minNumberOfDecks = 1;
         private int _maxNumberOfDecks = 4;
+
         private bool _optionsSaved;
 
         public int NumberOfPlayers
