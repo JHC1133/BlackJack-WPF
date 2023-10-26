@@ -14,16 +14,13 @@ namespace BlackJack.MVVM.ViewModel
 
 
         GameManager _gameManager;
-        Dealer _dealer;
 
         public PlayViewModel()
         {
             _gameManager = GameManager.Instance;
-            _dealer = _gameManager.Dealer;
         }
 
 
-        public Dealer Dealer { get => _dealer; set => _dealer = value; }
         public GameManager GameManager { get => _gameManager; }
     }
 }

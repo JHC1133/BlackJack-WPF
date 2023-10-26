@@ -19,9 +19,6 @@ namespace GameCardLibrary
         public int NumberOfCards { get; }
         public int Score => CalculateHandValue(); // Lambda?
 
-        private string BoundText = "bounded from Hand";
-        public string BoundText1 { get => BoundText; set => BoundText = value; }
-
         public ObservableCollection<Card> ObservableHandCollection { get => _observableHandCollection;}
 
         public Hand()

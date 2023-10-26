@@ -27,23 +27,112 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ItemsControl Grid.Column="1"
-                      Grid.ColumnSpan="2"
+        <StackPanel Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal">
+            <ItemsControl 
                       ItemsSource="{Binding GameManager.Dealer.Hand.ObservableHandCollection}">
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image />
-                        <TextBlock Text="{Binding ImagePath}"/>
-                        <TextBlock Text="{Binding BoundText1}"/>
-                    </StackPanel>
-                    
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            
-        </ItemsControl>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="100,0,0,0"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding ImagePath}" Width="77" Height="107"
+                                   Margin="-50,0,0,5"/>
+
+                            
+                        </StackPanel>
+
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+
+            <!-- Dealer Name -->
+            <TextBlock Text="{Binding GameManager.Dealer.Name}"
+                       Foreground="White"
+                       FontSize="20"
+                       HorizontalAlignment="Left"
+                       Margin="-75,0,0,0"/>
+
+        </StackPanel>
+
+        <StackPanel Grid.Column="0"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="4"
+                    Orientation="Horizontal">
+
+            <ItemsControl ItemsSource="{Binding GameManager.ObservablePlayers}">
+
+                
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <!-- Player Cards -->
+                            <ItemsControl ItemsSource="{Binding Hand.ObservableHandCollection}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        
+                                        <Image Source="{Binding ImagePath}" Width="77" Height="107"
+                                               Margin="-50,100,0,5"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+
+                            <!-- Hand Value -->
+                            <TextBlock Text="{Binding Hand.Score}"
+                                       Foreground="White"
+                                       FontSize="15"
+                                       HorizontalAlignment="Center"
+                                       Margin="-150,-135,0,0"/>
+
+                            <!-- Player Name -->
+                            <TextBlock Text="{Binding Name}"
+                                       Foreground="White"
+                                       FontSize="20"
+                                       Margin="10,0,0,0"/>
+
+                            <!-- Buttons (Hit and Stand) -->
+                            <StackPanel Orientation="Vertical">
+                                <Button Content="Hit" 
+                                        Style="{StaticResource BasicButton}"
+                                        Width="70"
+                                        Height="20"
+                                        Margin="-10,10,0,0"
+                                        HorizontalAlignment="Left"/>
+                                <Button Content="Stand" 
+                                        Style="{StaticResource BasicButton}"
+                                        Width="70"
+                                        Height="20"
+                                        Margin="-10,10,0,0"
+                                        HorizontalAlignment="Left"/>
+                            </StackPanel>
+
+                            <Border Background="Transparent" Width="175"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            
+        </StackPanel>
 
         
     </Grid>

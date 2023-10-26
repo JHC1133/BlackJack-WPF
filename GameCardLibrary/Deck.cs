@@ -7,7 +7,7 @@ using DAL;
 
 namespace GameCardLibrary
 {
-    internal class Deck
+    public class Deck
     {
 
         private List<Card> _cards;

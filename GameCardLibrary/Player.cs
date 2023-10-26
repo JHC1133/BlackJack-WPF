@@ -7,7 +7,7 @@ using System.Windows.Navigation;
 
 namespace GameCardLibrary
 {
-    internal class Player
+    public class Player
     {
         private string[] _nameArray =
         {
@@ -44,7 +44,7 @@ namespace GameCardLibrary
         private string RandomizeName()
         {
             Random rand = new Random();
-            int i = rand.Next(0, 8);
+            int i = rand.Next(0, _nameArray.Length - 1);
             string s = _nameArray[i];
             return s;
         }

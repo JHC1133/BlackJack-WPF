@@ -15,8 +15,12 @@ namespace BlackJack.MVVM.ViewModel
     class OptionsViewModel : ObservableObject
     {
         GameManager _gameManager = GameManager.Instance;
-        private int _numberOfPlayers;
-        private int _numberOfDecks;
+        private int _numberOfPlayers = 4;
+        private int _numberOfDecks = 4;
+        private int _minNumberOfPlayers = 2;
+        private int _maxNumberOfPlayers = 4;
+        private int _minNumberOfDecks = 1;
+        private int _maxNumberOfDecks = 4;
         private bool _optionsSaved;
 
         public int NumberOfPlayers
@@ -82,8 +86,8 @@ namespace BlackJack.MVVM.ViewModel
         /// </summary>
         private bool OptionsValueCheck()
         {
-            if (_numberOfPlayers >= 1 && _numberOfPlayers <= 3 &&
-                _numberOfDecks >= 1 && _numberOfDecks <= 4)
+            if (_numberOfPlayers >= _minNumberOfPlayers && _numberOfPlayers <= _maxNumberOfPlayers &&
+                _numberOfDecks >= _minNumberOfDecks && _numberOfDecks <= _maxNumberOfDecks)
             {
                 Debug.WriteLine("OptionsValueCheck = true");
                 return true;

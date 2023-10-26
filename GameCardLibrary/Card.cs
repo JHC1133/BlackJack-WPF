@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 namespace GameCardLibrary
 {
     public class Card
-    {
-        private string BoundText = "bounded from Hand";
-        public string BoundText1 { get => BoundText; set => BoundText = value; }
+    {      
         public Suit Suit { get; set; }
         public Value Value { get; set; }
         public string ImagePath { get; set; }
@@ -19,7 +17,7 @@ namespace GameCardLibrary
             Suit = suit;
             Value = value;
 
-            ImagePath = $"Assets/Cards/{(int)Value}{Suit.ToString()[0]}";
+            ImagePath = $"/Assets/Cards/{(int)Value}{Suit.ToString()[0]}.png";
         }
 
         public int GetCardValue()

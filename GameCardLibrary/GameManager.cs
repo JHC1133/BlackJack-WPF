@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace GameCardLibrary
 
         List<Player> _players;
         List<Deck> _decks;
+
+        ObservableCollection<Player> _observablePlayers;
 
         Random rand;
 
@@ -42,10 +45,13 @@ namespace GameCardLibrary
         public int NumberOfPlayers { get => _numberOfPlayers; }
         public int NumberOfDecks { get => _numberOfDecks; }
         public Dealer Dealer { get => _dealer; set => _dealer = value; }
+        public  ObservableCollection<Player> ObservablePlayers { get => _observablePlayers; set => _observablePlayers = value; }
 
         private GameManager()
         {
             rand = new Random();
+            _numberOfDecks = 1;
+            _numberOfPlayers = 1;
         }
 
         public void InitilizeGame(int numberOfDecks, int numberOfPlayers)
@@ -55,6 +61,22 @@ namespace GameCardLibrary
             InitializeGameDeck(numberOfDecks);
             InitializePlayers(numberOfPlayers);
             InitializeDealer();
+            InitializeObservableList();
+        }
+
+        /// <summary>
+        /// Copies _players (List) to _observablePlayers (ObservableCollection)
+        /// </summary>
+        private void InitializeObservableList()
+        {
+            //Move to helper as a more generic method
+
+            _observablePlayers = new ObservableCollection<Player>();
+
+            foreach (Player player in _players)
+            {
+                _observablePlayers.Add(player);
+            }
         }
 
         private void SetNumberOfPlayers(int numberOfPlayers)
@@ -79,7 +101,7 @@ namespace GameCardLibrary
 
             for (int i = 0; i < _numberOfPlayers; i++)
             {
-                int randomDeckValue = rand.Next(0, 3);
+                int randomDeckValue = rand.Next(0, _numberOfDecks - 1);
                 Hand playerHand = new Hand();
 
                 // Draws two cards from the deck and adds them to the player's hand
@@ -101,7 +123,7 @@ namespace GameCardLibrary
 
         private void InitializeDealer()
         {
-            int randomDeckValue = rand.Next(0, 3);
+            int randomDeckValue = rand.Next(0, NumberOfDecks - 1);
             Hand dealerHand = new Hand();
 
             dealerHand.AddCard(_decks[randomDeckValue].DrawCard());

@@ -19,7 +19,7 @@
                    HorizontalAlignment="Left"
                    Margin="20,0,0,20"/>
 
-        <TextBlock Text="Number of players (1-3)"
+        <TextBlock Text="Number of players (2-4)"
                    Foreground="White"
                    FontSize="20"
                    HorizontalAlignment="Left"
@@ -56,10 +56,10 @@
 
         <Button x:Name="btnOptionsSave"
                 Content="Save"
-                Width="100"
+                Width="75"
                 Height="20"
                 HorizontalAlignment="Left"
-                Margin="20,0,0,0"
+                Margin="34,0,0,0"
                 Style="{StaticResource BasicButton}"
                 Click="btnOptionsSave_Click">
             
