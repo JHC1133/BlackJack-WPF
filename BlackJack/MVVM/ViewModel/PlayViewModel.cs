@@ -12,23 +12,6 @@ namespace BlackJack.MVVM.ViewModel
     public class PlayViewModel : ObservableObject
     {
 
-        //private static PlayViewModel _instance;
-
-        //#region Singleton
-        //public static PlayViewModel Instance
-        //{
-        //    get
-        //    {
-        //        if (_instance == null)
-        //        {
-        //            _instance = new PlayViewModel();
-        //        }
-        //        return _instance;
-        //    }
-        //}
-
-
-        //#endregion
 
         GameManager _gameManager;
         Dealer _dealer;
@@ -38,6 +21,7 @@ namespace BlackJack.MVVM.ViewModel
             _gameManager = GameManager.Instance;
             _dealer = _gameManager.Dealer;
         }
+
 
         public Dealer Dealer { get => _dealer; set => _dealer = value; }
         public GameManager GameManager { get => _gameManager; }
