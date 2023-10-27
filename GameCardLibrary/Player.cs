@@ -19,7 +19,12 @@ namespace GameCardLibrary
             "Brandon",
             "Kristoffer",
             "Dick",
-            "Jose"
+            "Jose",
+            "Kevin",
+            "Sofia",
+            "Gorm",
+            "Zeke",
+            "McThundertits"
         };
 
         private string _name;
@@ -30,13 +35,14 @@ namespace GameCardLibrary
 
         public bool IsFinished { get; set; }
         public bool Winner { get; set; }
+        public bool IsBust { get; set; }
         public string Name { get => _name; }
         public int PlayerID { get => _playerID; }
         public Hand Hand { get => _hand; set => _hand = value; }
 
-        public Player(Hand hand)
+        public Player(Hand hand, string name)
         {
-            _name = RandomizeName();
+            _name = name;
             _playerID++;
             _hand = hand;
         }

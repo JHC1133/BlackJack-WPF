@@ -58,7 +58,12 @@
                        Foreground="White"
                        FontSize="20"
                        HorizontalAlignment="Left"
-                       Margin="-75,0,0,0"/>
+                       Margin="-90,0,0,0"/>
+
+            <TextBlock Text="{Binding GameManager.Dealer.Hand.Score}"
+                       Foreground="White"
+                       FontSize="15"
+                       Margin="-59,150,0,0"/>
 
         </StackPanel>
 
@@ -100,13 +105,14 @@
                                        Foreground="White"
                                        FontSize="15"
                                        HorizontalAlignment="Center"
-                                       Margin="-150,-135,0,0"/>
+                                       Margin="-170,-140,0,0"/>
 
                             <!-- Player Name -->
                             <TextBlock Text="{Binding Name}"
                                        Foreground="White"
                                        FontSize="20"
-                                       Margin="10,0,0,0"/>
+                                       Margin="-30,0,0,0"
+                                       HorizontalAlignment="Left"/>
 
                             <!-- Buttons (Hit and Stand) -->
                             <StackPanel Orientation="Vertical">
@@ -114,7 +120,7 @@
                                         Style="{StaticResource BasicButton}"
                                         Width="70"
                                         Height="20"
-                                        Margin="-10,10,0,0"
+                                        Margin="-30,10,0,0"
                                         HorizontalAlignment="Left"
                                         Command="{Binding DataContext.HitCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                         CommandParameter="{Binding}" />
@@ -124,8 +130,10 @@
                                         Style="{StaticResource BasicButton}"
                                         Width="70"
                                         Height="20"
-                                        Margin="-10,10,0,0"
-                                        HorizontalAlignment="Left"/>
+                                        Margin="-30,10,0,0"
+                                        HorizontalAlignment="Left"
+                                        Command="{Binding DataContext.StandCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                        CommandParameter="{Binding}"/>
                             </StackPanel>
 
                             <Border Background="Transparent" Width="175"/>

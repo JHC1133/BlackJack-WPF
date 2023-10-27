@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GameCardLibrary
@@ -13,18 +14,20 @@ namespace GameCardLibrary
         RulesCheck check;
         Dealer _dealer;
         Deck _deck;
+        Random rand;
 
+        List<string> _nameList;
         List<Player> _players;
         List<Deck> _decks;
-
         ObservableCollection<Player> _observablePlayers;
-
-        Random rand;
 
         private int _numberOfPlayers;
         private int _numberOfDecks;
 
-        private static GameManager _instance;
+        public event EventHandler<EventArgs> BustEvent;
+        public event EventHandler<EventArgs> DealerHitEvent;
+        public event EventHandler<Func<Player>> BlackJackEvent;
+
 
         #region Singleton
         public static GameManager Instance
@@ -42,6 +45,7 @@ namespace GameCardLibrary
 
         #endregion
 
+        private static GameManager _instance;
         public int NumberOfPlayers { get => _numberOfPlayers; }
         public int NumberOfDecks { get => _numberOfDecks; }
         public Dealer Dealer { get => _dealer; set => _dealer = value; }
@@ -50,8 +54,7 @@ namespace GameCardLibrary
         private GameManager()
         {
             rand = new Random();
-            //_numberOfDecks = 1;
-            //_numberOfPlayers = 1;
+            check = new RulesCheck();
         }
 
         #region Setters and Initializers
@@ -60,9 +63,12 @@ namespace GameCardLibrary
             SetNumberOfPlayers(numberOfPlayers);
             SetNumberOfDecks(numberOfDecks);
             InitializeGameDeck(numberOfDecks);
+            InitializePlayerNames();
             InitializePlayers(numberOfPlayers);
             InitializeDealer();
             InitializeObservableList();
+
+            GameConditionsCheck();
         }
 
         /// <summary>
@@ -93,7 +99,44 @@ namespace GameCardLibrary
         }
 
         /// <summary>
-        /// Needs to be initialized after InitiliazeGameDeck()
+        /// Initializes the name array for players
+        /// </summary>
+        private void InitializePlayerNames()
+        {
+            _nameList = new List<string>
+            {
+                    "Joar",
+                    "Farid",
+                    "Wilmer",
+                    "Simon",
+                    "Marco",
+                    "Brandon",
+                    "Kristoffer",
+                    "Dick",
+                    "Jose",
+                    "Kevin",
+                    "Sofia",
+                    "Gorm",
+                    "Zeke",
+                    "McThundertits"
+            };
+        }
+
+        /// <summary>
+        /// Returns a random name from the name array for players and removes it from the list
+        /// </summary>
+        /// <returns></returns>
+        private string RandomizeName()
+        {
+            Random rand = new Random();
+            int i = rand.Next(0, _nameList.Count - 1);
+            string s = _nameList[i];
+            _nameList.RemoveAt(i);
+            return s;
+        }
+
+        /// <summary>
+        /// Intializes the players and gives them two cards. Needs to be initialized after InitiliazeGameDeck()
         /// </summary>
         /// <param name="numberOfPlayers"></param>
         private void InitializePlayers(int numberOfPlayers)
@@ -109,7 +152,7 @@ namespace GameCardLibrary
                 playerHand.AddCard(_decks[randomDeckValue].DrawCard());
                 playerHand.AddCard(_decks[randomDeckValue].DrawCard());
 
-                Player player = new Player(playerHand);
+                Player player = new Player(playerHand, RandomizeName());
                 _players.Add(player);
 
 
@@ -122,6 +165,9 @@ namespace GameCardLibrary
             
         }
 
+        /// <summary>
+        /// Initializes the dealer with two cards
+        /// </summary>
         private void InitializeDealer()
         {
             int randomDeckValue = rand.Next(0, NumberOfDecks - 1);
@@ -158,6 +204,10 @@ namespace GameCardLibrary
             
         }
 
+        /// <summary>
+        /// Creates a standard deck of 52 cards
+        /// </summary>
+        /// <returns></returns>
         private List<Card> CreateStandardDeck()
         {
             List<Card> deck = new List<Card>();
@@ -181,6 +231,10 @@ namespace GameCardLibrary
 
         #region GameMechanics
 
+        /// <summary>
+        /// Gives the player a card if CanHit(Player player) is true
+        /// </summary>
+        /// <param name="player"></param>
         public void Hit(Player player)
         {
             int randomDeckValue = rand.Next(0, _numberOfDecks - 1);
@@ -189,15 +243,80 @@ namespace GameCardLibrary
             {
                 if (player == playerInList)
                 {
-                    if (playerInList.Hand.Score < 21)
+                    if (check.CanHit(playerInList))
                     {
                         playerInList.Hand.AddCard(_decks[randomDeckValue].DrawCard());
-                    }
-                    
+                    }                  
+                }
+            }           
+        }
+
+        /// <summary>
+        /// Gives the dealer a card if CanHit(Dealer dealer) is true
+        /// </summary>
+        /// <param name="dealer"></param>
+        public void Hit(Dealer dealer)
+        {
+            int randomDeckValue = rand.Next(0, _numberOfDecks - 1);
+
+            if (check.CanHit(dealer))
+            {
+                dealer.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+            }
+        }
+
+        /// <summary>
+        /// Player stands and IsFinished is set to true
+        /// </summary>
+        /// <param name="player"></param>
+        public void Stand(Player player)
+        {
+            foreach (Player playerInList in _players)
+            {
+                if (player == playerInList)
+                {
+                    playerInList.IsFinished = true;
+                    FinishedRoundCheck();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks if all players have finished, if true Dealer will continue
+        /// </summary>
+        /// <returns></returns>
+        private void FinishedRoundCheck()
+        {
+            bool allPlayersFinished = true;
+
+            foreach (Player player in _players)
+            {
+                if (!player.IsFinished)
+                {
+                    allPlayersFinished = false;
                 }
             }
 
+            if (allPlayersFinished)
+            {
+                while (check.CanHit(_dealer))
+                {
+                    Hit(_dealer);
+                }
+            }
+        }
+
+        private void GameConditionsCheck()
+        {
             
+            foreach (Player player in _players)
+            {
+                if (check.IsBlackjack(player.Hand) && check.PlayerWon(player, _dealer) && !check.IsTie(player, _dealer))
+                {
+                    BlackJackEvent?.Invoke(this, () => player);
+                    Debug.WriteLine("BlackJackEvent sent");
+                }
+            }
         }
 
         #endregion

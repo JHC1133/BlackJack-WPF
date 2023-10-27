@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BlackJack.MVVM.ViewModel
@@ -16,18 +17,22 @@ namespace BlackJack.MVVM.ViewModel
         private int _score;
 
         GameManager _gameManager;
-
-        
+     
         public ICommand HitCommand { get; private set; }
+        public ICommand StandCommand { get; private set; }
 
         public PlayViewModel()
         {
             _gameManager = GameManager.Instance;
+
             HitCommand = new RelayCommand(player => ExecuteHit(player));
+            StandCommand = new RelayCommand(player => ExecuteStand(player));
+
+            _gameManager.BlackJackEvent += HandleBlackJackEvent;
         }
 
-
         public GameManager GameManager { get => _gameManager; }
+
         public int VMScore
         {
             get { return _score; }
@@ -54,5 +59,24 @@ namespace BlackJack.MVVM.ViewModel
                 Debug.WriteLine(_score);
             }
         }
+
+        private void ExecuteStand(object player)
+        {
+            if (player is Player currentPlayer)
+            {
+                _gameManager.Stand(currentPlayer);
+            }
+        }
+
+        private void HandleBlackJackEvent(object sender, Func<Player> getPlayerFunc)
+        {
+            Player playerWithBlackJack = getPlayerFunc();
+
+            if (playerWithBlackJack != null)
+            {
+                MessageBox.Show($"{playerWithBlackJack.Name} got a Blackjack!");
+            }
+        }
+
     }
 }

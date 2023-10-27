@@ -10,13 +10,12 @@ namespace GameCardLibrary
 {
     public class Hand
     {
+        private int _numberOfCards;
         private List<Card> _cards;
-
-        Deck _deck;
 
         ObservableCollection<Card> _observableHandCollection;
         public Card LastCard { get; }
-        public int NumberOfCards { get; }
+        public int NumberOfCards { get => _numberOfCards; }
         public int Score => CalculateHandValue(); // Lambda?
 
         public ObservableCollection<Card> ObservableHandCollection { get => _observableHandCollection;}
@@ -55,6 +54,7 @@ namespace GameCardLibrary
         {
             _cards.Add(card);
             AddCardToObservableHand(card);
+            _numberOfCards++;
         }
 
         private void AddCardToObservableHand(Card card)
