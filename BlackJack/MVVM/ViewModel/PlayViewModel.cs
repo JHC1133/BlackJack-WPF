@@ -14,12 +14,12 @@ namespace BlackJack.MVVM.ViewModel
 {
     public class PlayViewModel : ObservableObject
     {
-        private int _score;
 
         GameManager _gameManager;
      
         public ICommand HitCommand { get; private set; }
         public ICommand StandCommand { get; private set; }
+        public ICommand RefreshCommand { get; private set; }
 
         public PlayViewModel()
         {
@@ -29,34 +29,22 @@ namespace BlackJack.MVVM.ViewModel
             StandCommand = new RelayCommand(player => ExecuteStand(player));
 
             _gameManager.BlackJackEvent += HandleBlackJackEvent;
+            _gameManager.PlayerBustEvent += HandlePlayerBustEvent;
+            _gameManager.DealerBustEvent += HandleDealerBustEvent;
         }
 
         public GameManager GameManager { get => _gameManager; }
-
-        public int VMScore
-        {
-            get { return _score; }
-            set
-            {
-                if (_score != value)
-                {
-                    _score = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
         private void ExecuteHit(object player)
         {
             if (player is Player currentPlayer)
             {
                 _gameManager.Hit(currentPlayer);
-                _score = currentPlayer.Hand.Score;
 
                 OnPropertyChanged(nameof(currentPlayer));
+                OnPropertyChanged(nameof(_gameManager));
 
                 Debug.WriteLine("Player HitCommand executed");
-                Debug.WriteLine(_score);
             }
         }
 
@@ -68,14 +56,35 @@ namespace BlackJack.MVVM.ViewModel
             }
         }
 
+        private void ExecuteRefresh(object parameter)
+        {
+            OnPropertyChanged(nameof(_gameManager));
+        }
+
         private void HandleBlackJackEvent(object sender, Func<Player> getPlayerFunc)
         {
             Player playerWithBlackJack = getPlayerFunc();
 
             if (playerWithBlackJack != null)
             {
-                MessageBox.Show($"{playerWithBlackJack.Name} got a Blackjack!");
+                //MessageBox.Show($"{playerWithBlackJack.Name} got a Blackjack!");
+                //playerWithBlackJack
             }
+        }
+
+        private void HandlePlayerBustEvent(object sender, Func<Player> getPlayerFunc)
+        {
+            Player playerWithBlackJack = getPlayerFunc();
+
+            if (playerWithBlackJack != null)
+            {
+                MessageBox.Show($"{playerWithBlackJack.Name} got bust!");
+            }
+        }
+
+        private void HandleDealerBustEvent(object sender, EventArgs e)
+        {
+            MessageBox.Show($"{_gameManager.Dealer.Name} got bust");
         }
 
     }

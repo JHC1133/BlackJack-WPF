@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Animation;
 
 namespace GameCardLibrary
 {
@@ -34,6 +35,15 @@ namespace GameCardLibrary
         public bool IsBlackjack(Hand hand)
         {
             if (hand.NumberOfCards == 2 && hand.Score == blackjackValue)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool PlayerWonWithBlackjack(Player player, Dealer dealer)
+        {
+            if (IsBlackjack(player.Hand) && PlayerWon(player, dealer) && !IsTie(player, dealer))
             {
                 return true;
             }

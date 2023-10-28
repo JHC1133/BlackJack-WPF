@@ -12,11 +12,12 @@ namespace GameCardLibrary
     {
         private int _numberOfCards;
         private List<Card> _cards;
+        private int _score;
 
         ObservableCollection<Card> _observableHandCollection;
         public Card LastCard { get; }
         public int NumberOfCards { get => _numberOfCards; }
-        public int Score => CalculateHandValue(); // Lambda?
+        public int Score { get => _score; set => _score = value; } // Lambda?
 
         public ObservableCollection<Card> ObservableHandCollection { get => _observableHandCollection;}
 
@@ -53,13 +54,9 @@ namespace GameCardLibrary
         public void AddCard(Card card)
         {
             _cards.Add(card);
-            AddCardToObservableHand(card);
-            _numberOfCards++;
-        }
-
-        private void AddCardToObservableHand(Card card)
-        {
             _observableHandCollection.Add(card);
+            _numberOfCards++;
+            _score = CalculateHandValue();
         }
 
         public List<Card> GetCurrentCards()
@@ -67,9 +64,10 @@ namespace GameCardLibrary
             return _cards;
         }
 
-        private void Clear()
+        public void Clear()
         {
             _cards.Clear();
+            _observableHandCollection.Clear();
         }
 
         public override string ToString()

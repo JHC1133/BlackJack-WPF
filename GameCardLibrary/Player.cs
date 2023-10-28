@@ -28,6 +28,7 @@ namespace GameCardLibrary
         };
 
         private string _name;
+        private string _stateText;
         private int _playerID;
 
         private Hand _hand;
@@ -39,6 +40,7 @@ namespace GameCardLibrary
         public string Name { get => _name; }
         public int PlayerID { get => _playerID; }
         public Hand Hand { get => _hand; set => _hand = value; }
+        public string StateText { get => _stateText; set => _stateText = value; }
 
         public Player(Hand hand, string name)
         {

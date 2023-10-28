@@ -7,11 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace BlackJack.MVVM.ViewModel
 {
     class MainViewModel : ObservableObject
     {
+
         #region MVVM
         public RelayCommand OptionsViewCommand { get; set; }
         public RelayCommand PlayViewCommand { get; set; }
@@ -35,7 +37,6 @@ namespace BlackJack.MVVM.ViewModel
 
         public MainViewModel()
         {
-
             OptionsVM = new OptionsViewModel();
             PlayVM = new PlayViewModel();
 
@@ -49,8 +50,8 @@ namespace BlackJack.MVVM.ViewModel
             PlayViewCommand = new RelayCommand(o =>
             {
                 CurrentView = PlayVM;
+                GameManager.Instance.GameConditionsCheck();
             });
         }
-
     }
 }

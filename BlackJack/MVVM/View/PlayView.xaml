@@ -105,13 +105,20 @@
                                        Foreground="White"
                                        FontSize="15"
                                        HorizontalAlignment="Center"
-                                       Margin="-170,-140,0,0"/>
+                                       Margin="-260,-140,0,0"/>
+
+                            <!-- State -->
+                            <TextBlock Text="{Binding StateText}"
+                                       Foreground="White"
+                                       FontSize="15"
+                                       HorizontalAlignment="Center"
+                                       Margin="-180,-140,0,0"/>
 
                             <!-- Player Name -->
                             <TextBlock Text="{Binding Name}"
                                        Foreground="White"
                                        FontSize="20"
-                                       Margin="-30,0,0,0"
+                                       Margin="-50,0,0,0"
                                        HorizontalAlignment="Left"/>
 
                             <!-- Buttons (Hit and Stand) -->
@@ -120,7 +127,7 @@
                                         Style="{StaticResource BasicButton}"
                                         Width="70"
                                         Height="20"
-                                        Margin="-30,10,0,0"
+                                        Margin="-50,10,0,0"
                                         HorizontalAlignment="Left"
                                         Command="{Binding DataContext.HitCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                         CommandParameter="{Binding}" />
@@ -130,7 +137,7 @@
                                         Style="{StaticResource BasicButton}"
                                         Width="70"
                                         Height="20"
-                                        Margin="-30,10,0,0"
+                                        Margin="-20,10,0,0"
                                         HorizontalAlignment="Left"
                                         Command="{Binding DataContext.StandCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                         CommandParameter="{Binding}"/>

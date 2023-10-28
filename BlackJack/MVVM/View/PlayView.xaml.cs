@@ -28,6 +28,12 @@ namespace BlackJack.MVVM.View
             InitializeComponent();
 
             DataContext = new PlayViewModel();
+            
+        }
+
+        private void RefreshControls()
+        {
+            
         }
     }
 }

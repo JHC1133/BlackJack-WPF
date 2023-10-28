@@ -24,9 +24,10 @@ namespace GameCardLibrary
         private int _numberOfPlayers;
         private int _numberOfDecks;
 
-        public event EventHandler<EventArgs> BustEvent;
-        public event EventHandler<EventArgs> DealerHitEvent;
+        //public event EventHandler<EventArgs> DealerHitEvent;
+        public event EventHandler<Func<Player>> PlayerBustEvent;
         public event EventHandler<Func<Player>> BlackJackEvent;
+        public event EventHandler<EventArgs> DealerBustEvent;
 
 
         #region Singleton
@@ -68,7 +69,7 @@ namespace GameCardLibrary
             InitializeDealer();
             InitializeObservableList();
 
-            GameConditionsCheck();
+            //GameConditionsCheck();
         }
 
         /// <summary>
@@ -245,7 +246,7 @@ namespace GameCardLibrary
                 {
                     if (check.CanHit(playerInList))
                     {
-                        playerInList.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+                        AddCardToPlayerHand(playerInList, 1);
                     }                  
                 }
             }           
@@ -261,7 +262,7 @@ namespace GameCardLibrary
 
             if (check.CanHit(dealer))
             {
-                dealer.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+                AddCardToDealerHand(_dealer, 1);
             }
         }
 
@@ -278,6 +279,94 @@ namespace GameCardLibrary
                     playerInList.IsFinished = true;
                     FinishedRoundCheck();
                 }
+            }
+        }
+
+        private void NewRound()
+        {
+            foreach (Player player in _players)
+            {
+                player.IsFinished = false;
+                player.IsBust = false;
+                player.Winner = false;
+                player.StateText = "";
+            }
+
+            ClearHands();
+            DealCards();
+        }
+
+        /// <summary>
+        /// Clear hands of the players and dealer
+        /// </summary>
+        private void ClearHands()
+        {
+            _dealer.Hand.Clear();
+
+            foreach (Player player in _players)
+            {
+                player.Hand.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Deals cards to the players and the dealer
+        /// </summary>
+        private void DealCards()
+        {
+            foreach (Player player in _players)
+            {
+                AddCardToPlayerHand(player, 2);
+            }
+
+            AddCardToDealerHand(_dealer, 2);
+        }
+
+        /// <summary>
+        /// Adds card to player hand. Number of cards can be of value 1 or 2 only
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="numberOfCards"></param>
+        private void AddCardToPlayerHand(Player player, int numberOfCards)
+        {
+            int randomDeckValue = rand.Next(0, _numberOfDecks - 1);
+
+            if (numberOfCards == 1)
+            {
+                player.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+            }
+            else if (numberOfCards == 2)
+            {
+                player.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+                player.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+            }
+            else
+            {
+                Debug.WriteLine("Player can only be given 1 or 2 cards at the same time");
+            }
+        }
+
+        /// <summary>
+        /// Adds card to dealer hand. Number of cards can be of value 1 or 2 only
+        /// </summary>
+        /// <param name="dealer"></param>
+        /// <param name="numberOfCards"></param>
+        private void AddCardToDealerHand(Dealer dealer, int numberOfCards)
+        {
+            int randomDeckValue = rand.Next(0, _numberOfDecks - 1);
+
+            if (numberOfCards == 1)
+            {
+                dealer.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+            }
+            else if (numberOfCards == 2)
+            {
+                dealer.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+                dealer.Hand.AddCard(_decks[randomDeckValue].DrawCard());
+            }
+            else
+            {
+                Debug.WriteLine("Dealer can only be given 1 or 2 cards at the same time");
             }
         }
 
@@ -303,19 +392,36 @@ namespace GameCardLibrary
                 {
                     Hit(_dealer);
                 }
+                GameConditionsCheck();
+                NewRound();
             }
         }
 
-        private void GameConditionsCheck()
+        /// <summary>
+        /// Checks win and lose conditions
+        /// </summary>
+        public void GameConditionsCheck()
         {
             
             foreach (Player player in _players)
             {
-                if (check.IsBlackjack(player.Hand) && check.PlayerWon(player, _dealer) && !check.IsTie(player, _dealer))
+                if (check.PlayerWonWithBlackjack(player, _dealer))
                 {
                     BlackJackEvent?.Invoke(this, () => player);
+                    player.StateText = "Blackjack";
                     Debug.WriteLine("BlackJackEvent sent");
                 }
+                else if (check.IsBust(player.Hand))
+                {
+                    PlayerBustEvent?.Invoke(this, () => player);
+                    player.StateText = "Bust";
+                    Debug.WriteLine("PlayerBustEvent sent");
+                }
+            }
+
+            if (check.IsBust(_dealer.Hand))
+            {
+                DealerBustEvent?.Invoke(this, EventArgs.Empty);
             }
         }
 
