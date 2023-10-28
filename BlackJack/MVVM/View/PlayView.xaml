@@ -40,12 +40,26 @@
         <StackPanel Grid.Column="1"
                     Grid.ColumnSpan="2"
                     Orientation="Horizontal">
+
+            <!-- Dealer Name -->
+            <TextBlock Text="{Binding GameManager.Dealer.Name}"
+               Foreground="White"
+               FontSize="20"
+               HorizontalAlignment="Left"
+               Margin="65,0,0,0"/>
+
+            <!-- Dealer Hand Score -->
+            <TextBlock Text="{Binding GameManager.Dealer.Hand.Score}"
+               Foreground="White"
+               FontSize="15"
+               Margin="-45,145,0,0"/>
+            
             <ItemsControl 
                       ItemsSource="{Binding GameManager.Dealer.Hand.ObservableHandCollection}">
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="100,0,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="-40,0,0,0"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -63,17 +77,7 @@
 
             </ItemsControl>
 
-            <!-- Dealer Name -->
-            <TextBlock Text="{Binding GameManager.Dealer.Name}"
-                       Foreground="White"
-                       FontSize="20"
-                       HorizontalAlignment="Left"
-                       Margin="-90,0,0,0"/>
-
-            <TextBlock Text="{Binding GameManager.Dealer.Hand.Score}"
-                       Foreground="White"
-                       FontSize="15"
-                       Margin="-59,150,0,0"/>
+           
 
         </StackPanel>
 

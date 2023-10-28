@@ -50,7 +50,7 @@ namespace BlackJack.MVVM.ViewModel
             PlayViewCommand = new RelayCommand(o =>
             {
                 CurrentView = PlayVM;
-                GameManager.Instance.GameConditionsCheck();
+                GameManager.Instance.BlackJackCheck();
             });
         }
     }

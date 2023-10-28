@@ -75,7 +75,7 @@ namespace BlackJack.MVVM.ViewModel
 
             if (playerWithBlackJack != null && !messageShown)
             {
-                MessageBox.Show($"{playerWithBlackJack.Name} got a Blackjack!");
+                //MessageBox.Show($"{playerWithBlackJack.Name} got a Blackjack!");
                 messageShown = true;
                 //playerWithBlackJack
             }
@@ -88,7 +88,7 @@ namespace BlackJack.MVVM.ViewModel
 
             if (playerWithBlackJack != null && !messageShown)
             {
-                MessageBox.Show($"{playerWithBlackJack.Name} got bust!");
+                //MessageBox.Show($"{playerWithBlackJack.Name} got bust!");
                 
             }
             messageShown = true;
@@ -100,7 +100,7 @@ namespace BlackJack.MVVM.ViewModel
 
             if (!messageShown)
             {
-                MessageBox.Show($"{_gameManager.Dealer.Name} got bust");
+                //MessageBox.Show($"{_gameManager.Dealer.Name} got bust");
                 messageShown = true;
             }
         }

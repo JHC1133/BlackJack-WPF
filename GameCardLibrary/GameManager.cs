@@ -24,6 +24,8 @@ namespace GameCardLibrary
         private int _numberOfPlayers;
         private int _numberOfDecks;
 
+        private bool _NextRoundBtnVisible;
+
         //public event EventHandler<EventArgs> DealerHitEvent;
         public event EventHandler<Func<Player>> PlayerBustEvent;
         public event EventHandler<Func<Player>> BlackJackEvent;
@@ -51,6 +53,7 @@ namespace GameCardLibrary
         public int NumberOfDecks { get => _numberOfDecks; }
         public Dealer Dealer { get => _dealer; set => _dealer = value; }
         public  ObservableCollection<Player> ObservablePlayers { get => _observablePlayers; set => _observablePlayers = value; }
+        public bool NextRoundBtnVisible { get => _NextRoundBtnVisible; }
 
         private GameManager()
         {
@@ -68,7 +71,6 @@ namespace GameCardLibrary
             InitializePlayers(numberOfPlayers);
             InitializeDealer();
             InitializeObservableList();
-
             //GameConditionsCheck();
         }
 
@@ -220,7 +222,7 @@ namespace GameCardLibrary
                     Card card;
                     deck.Add(card = new Card(suit, value));
 
-                    Debug.WriteLine(card.ToString());
+                    //Debug.WriteLine(card.ToString());
                 }
             }
 
@@ -284,10 +286,10 @@ namespace GameCardLibrary
 
         public void NewRound()
         {
-
             ResetPlayers();
             ClearHands();
             DealCards();
+            BlackJackCheck();
         }
 
         /// <summary>
@@ -391,6 +393,7 @@ namespace GameCardLibrary
                 if (!player.IsFinished)
                 {
                     allPlayersFinished = false;
+                    _NextRoundBtnVisible = false;
                 }
             }
 
@@ -401,7 +404,20 @@ namespace GameCardLibrary
                     Hit(_dealer);
                 }
                 GameConditionsCheck();
-                //NewRound();
+                _NextRoundBtnVisible = true;
+            }
+        }
+
+        public void BlackJackCheck()
+        {
+            foreach (Player player in _players)
+            {
+                if (check.PlayerWonWithBlackjack(player, _dealer))
+                {
+                    BlackJackEvent?.Invoke(this, () => player);
+                    player.StateText = State.Blackjack.ToString();
+                    Debug.WriteLine("BlackJackEvent sent");
+                }
             }
         }
 
@@ -413,13 +429,7 @@ namespace GameCardLibrary
             
             foreach (Player player in _players)
             {
-                if (check.PlayerWonWithBlackjack(player, _dealer))
-                {
-                    BlackJackEvent?.Invoke(this, () => player);
-                    player.StateText = State.Blackjack.ToString();
-                    Debug.WriteLine("BlackJackEvent sent");
-                }
-                else if (check.IsBust(player.Hand))
+                if (check.IsBust(player.Hand))
                 {
                     PlayerBustEvent?.Invoke(this, () => player);
                     player.StateText = State.Bust.ToString();
@@ -429,20 +439,24 @@ namespace GameCardLibrary
                 {
                     player.StateText = State.Tie.ToString();
                 }
-                else if (check.PlayerWon(player, _dealer))
+                else if (check.PlayerWon(player, _dealer) && !check.IsBust(player.Hand))
                 {
                     player.StateText = State.Winner.ToString();
                 }
-                else if (check.DealerWon(player, _dealer))
+                else if (check.DealerWon(player, _dealer) && !check.IsBust(_dealer.Hand))
                 {
                     player.StateText = State.Loser.ToString();
                 }
+                else if (check.IsBust(_dealer.Hand))
+                {
+                    DealerBustEvent?.Invoke(this, EventArgs.Empty);
+                    player.StateText = State.Winner.ToString();
+                }
+
+                Debug.WriteLine(player.StateText);
             }
 
-            if (check.IsBust(_dealer.Hand))
-            {
-                DealerBustEvent?.Invoke(this, EventArgs.Empty);
-            }
+           
         }
 
         #endregion

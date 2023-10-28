@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Navigation;
 
 namespace GameCardLibrary
 {
-    public class Player
+    public class Player : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private string[] _nameArray =
         {
             "Joar",
@@ -40,7 +49,20 @@ namespace GameCardLibrary
         public string Name { get => _name; }
         public int PlayerID { get => _playerID; }
         public Hand Hand { get => _hand; set => _hand = value; }
-        public string StateText { get => _stateText; set => _stateText = value; }
+
+
+        public string StateText
+        {
+            get { return _stateText; }
+            set
+            {
+                if (_stateText != value)
+                {
+                    _stateText = value;
+                    OnPropertyChanged(); // Notify the UI of the property change
+                }
+            }
+        }
 
         public Player(Hand hand, string name)
         {

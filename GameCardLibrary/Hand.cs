@@ -1,15 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GameCardLibrary
 {
-    public class Hand
+    public class Hand : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private int _numberOfCards;
         private List<Card> _cards;
         private int _score;
@@ -17,7 +26,20 @@ namespace GameCardLibrary
         ObservableCollection<Card> _observableHandCollection;
         public Card LastCard { get; }
         public int NumberOfCards { get => _numberOfCards; }
-        public int Score { get => _score; set => _score = value; } // Lambda?
+        //public int Score { get => _score; set => _score = value; } // Lambda?
+
+        public int Score
+        {
+            get { return _score; }
+            set
+            {
+                if (_score != value)
+                {
+                    _score = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public ObservableCollection<Card> ObservableHandCollection { get => _observableHandCollection;}
 
@@ -48,6 +70,7 @@ namespace GameCardLibrary
                 numberOfAces--;
             }
 
+            OnPropertyChanged();
             return value;
         }
 
