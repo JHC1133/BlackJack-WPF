@@ -14,7 +14,9 @@ namespace BlackJack.MVVM.ViewModel
 {
     class OptionsViewModel : ObservableObject
     {
+        Helper helper;
         GameManager _gameManager = GameManager.Instance;
+
         private int _numberOfPlayers = 4;
         private int _numberOfDecks = 4;
 
@@ -60,6 +62,7 @@ namespace BlackJack.MVVM.ViewModel
         public OptionsViewModel()
         {
             SaveCommand = new RelayCommand(ExecuteSave, CanExecuteSave);
+            helper = new Helper();
         }
 
 
@@ -88,8 +91,10 @@ namespace BlackJack.MVVM.ViewModel
         /// </summary>
         private bool OptionsValueCheck()
         {
-            if (_numberOfPlayers >= _minNumberOfPlayers && _numberOfPlayers <= _maxNumberOfPlayers &&
-                _numberOfDecks >= _minNumberOfDecks && _numberOfDecks <= _maxNumberOfDecks)
+            bool correctAmountPlayers = helper.WithinMinMaxValueCheck(_minNumberOfPlayers, _maxNumberOfPlayers, _numberOfPlayers);
+            bool correctAmountDecks = helper.WithinMinMaxValueCheck(_minNumberOfDecks, _maxNumberOfDecks, _numberOfDecks);
+
+            if (correctAmountPlayers && correctAmountDecks)
             {
                 Debug.WriteLine("OptionsValueCheck = true");
                 return true;

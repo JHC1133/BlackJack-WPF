@@ -35,7 +35,8 @@
                 Width="100"
                 Height="20"
                 Margin="-140,-250,0,0"
-                Command="{Binding NextRoundCommand}"/>
+                Command="{Binding NextRoundCommand}"
+                IsEnabled="{Binding GameManager.NextRoundBtnVisible}"/>
 
         <StackPanel Grid.Column="1"
                     Grid.ColumnSpan="2"

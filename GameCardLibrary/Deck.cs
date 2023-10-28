@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace GameCardLibrary
 
         Random randomArranger;
 
+        public event EventHandler<EventArgs> EmptyDeckEvent;
+
         public bool GameIsDone { get; set; }
 
         public Deck(List<Card> cardList)
@@ -25,7 +28,6 @@ namespace GameCardLibrary
         /// Draws a card from the decks availabe, as well as removing drawn card from the deck
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="InvalidCastException"></exception>
         public Card DrawCard()
         {
             if (_cards.Count > 0)
@@ -36,7 +38,9 @@ namespace GameCardLibrary
             }
             else
             {
-                throw new InvalidCastException("The deck is empty");
+                Debug.WriteLine("The deck is empty, creating new");
+                _cards = CreateStandardDeck();
+                return DrawCard();
             }
         }
 
@@ -54,6 +58,25 @@ namespace GameCardLibrary
         public void DiscardCards()
         {
             _cards.Clear();
+        }
+
+        private List<Card> CreateStandardDeck()
+        {
+            List<Card> deck = new List<Card>();
+
+            foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+            {
+                foreach (Value value in Enum.GetValues(typeof(Value)))
+                {
+                    Card card;
+                    deck.Add(card = new Card(suit, value));
+
+                    //Debug.WriteLine(card.ToString());
+                }
+            }
+
+
+            return deck;
         }
 
         /// <summary>
@@ -90,6 +113,11 @@ namespace GameCardLibrary
         private void OnShuffle(object source, EventArgs e)
         {
 
+        }
+
+        private void OnEmptyDeck(object source, EventArgs e)
+        {
+            EmptyDeckEvent?.Invoke(this, e);
         }
 
 

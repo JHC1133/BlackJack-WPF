@@ -70,7 +70,7 @@ namespace GameCardLibrary
                 numberOfAces--;
             }
 
-            OnPropertyChanged();
+            //OnPropertyChanged();
             return value;
         }
 
@@ -79,7 +79,7 @@ namespace GameCardLibrary
             _cards.Add(card);
             _observableHandCollection.Add(card);
             _numberOfCards++;
-            _score = CalculateHandValue();
+            Score = CalculateHandValue();
         }
 
         public List<Card> GetCurrentCards()

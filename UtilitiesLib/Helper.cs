@@ -39,5 +39,13 @@ namespace UtilitiesLib
             return false;
         }
 
+        public bool WithinMinMaxValueCheck(int minVal, int maxVal, int valToCheck)
+        {
+            if (valToCheck >= minVal && valToCheck <= maxVal)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -20,7 +20,6 @@ namespace BlackJack.MVVM.ViewModel
         public ICommand HitCommand { get; private set; }
         public ICommand StandCommand { get; private set; }
         public ICommand NextRoundCommand { get; private set; }
-        public ICommand RefreshCommand { get; private set; }
 
         public PlayViewModel()
         {
@@ -61,11 +60,6 @@ namespace BlackJack.MVVM.ViewModel
         private void ExecuteNextRound()
         {
             _gameManager.NewRound();
-        }
-
-        private void ExecuteRefresh(object parameter)
-        {
-            OnPropertyChanged(nameof(_gameManager));
         }
 
         private void HandleBlackJackEvent(object sender, Func<Player> getPlayerFunc)

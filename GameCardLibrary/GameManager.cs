@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace GameCardLibrary
 {
-    public class GameManager
+    public class GameManager : INotifyPropertyChanged
     {
         RulesCheck check;
         Dealer _dealer;
@@ -24,13 +27,33 @@ namespace GameCardLibrary
         private int _numberOfPlayers;
         private int _numberOfDecks;
 
-        private bool _NextRoundBtnVisible;
+        private bool _nextRoundBtnVisible;
 
         //public event EventHandler<EventArgs> DealerHitEvent;
         public event EventHandler<Func<Player>> PlayerBustEvent;
         public event EventHandler<Func<Player>> BlackJackEvent;
         public event EventHandler<EventArgs> DealerBustEvent;
 
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public bool NextRoundBtnVisible
+        {
+            get { return _nextRoundBtnVisible; }
+            set
+            {
+                if (_nextRoundBtnVisible != value)
+                {
+                    _nextRoundBtnVisible = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         #region Singleton
         public static GameManager Instance
@@ -53,12 +76,13 @@ namespace GameCardLibrary
         public int NumberOfDecks { get => _numberOfDecks; }
         public Dealer Dealer { get => _dealer; set => _dealer = value; }
         public  ObservableCollection<Player> ObservablePlayers { get => _observablePlayers; set => _observablePlayers = value; }
-        public bool NextRoundBtnVisible { get => _NextRoundBtnVisible; }
 
         private GameManager()
         {
             rand = new Random();
             check = new RulesCheck();
+
+            
         }
 
         #region Setters and Initializers
@@ -393,7 +417,7 @@ namespace GameCardLibrary
                 if (!player.IsFinished)
                 {
                     allPlayersFinished = false;
-                    _NextRoundBtnVisible = false;
+                    NextRoundBtnVisible = false;
                 }
             }
 
@@ -404,7 +428,7 @@ namespace GameCardLibrary
                     Hit(_dealer);
                 }
                 GameConditionsCheck();
-                _NextRoundBtnVisible = true;
+                NextRoundBtnVisible = true;
             }
         }
 
@@ -426,7 +450,7 @@ namespace GameCardLibrary
         /// </summary>
         public void GameConditionsCheck()
         {
-            
+
             foreach (Player player in _players)
             {
                 if (check.IsBust(player.Hand))
@@ -443,6 +467,10 @@ namespace GameCardLibrary
                 {
                     player.StateText = State.Winner.ToString();
                 }
+                else if (check.PlayerWon(player, _dealer) && !check.IsBust(player.Hand) && check.IsBust(_dealer.Hand))
+                {
+                    player.StateText = State.Winner.ToString();
+                }
                 else if (check.DealerWon(player, _dealer) && !check.IsBust(_dealer.Hand))
                 {
                     player.StateText = State.Loser.ToString();
@@ -456,7 +484,7 @@ namespace GameCardLibrary
                 Debug.WriteLine(player.StateText);
             }
 
-           
+
         }
 
         #endregion
