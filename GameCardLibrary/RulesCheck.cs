@@ -66,6 +66,21 @@ namespace GameCardLibrary
         }
 
         /// <summary>
+        /// Returns true if dealer score is greater than the player score
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="dealer"></param>
+        /// <returns></returns>
+        public bool DealerWon(Player player, Dealer dealer)
+        {
+            if (player.Hand.Score < dealer.Hand.Score)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Returns true if player and dealer score are equal
         /// </summary>
         /// <param name="player"></param>

@@ -282,7 +282,18 @@ namespace GameCardLibrary
             }
         }
 
-        private void NewRound()
+        public void NewRound()
+        {
+
+            ResetPlayers();
+            ClearHands();
+            DealCards();
+        }
+
+        /// <summary>
+        /// Resets the properties of the players
+        /// </summary>
+        private void ResetPlayers()
         {
             foreach (Player player in _players)
             {
@@ -291,9 +302,6 @@ namespace GameCardLibrary
                 player.Winner = false;
                 player.StateText = "";
             }
-
-            ClearHands();
-            DealCards();
         }
 
         /// <summary>
@@ -393,7 +401,7 @@ namespace GameCardLibrary
                     Hit(_dealer);
                 }
                 GameConditionsCheck();
-                NewRound();
+                //NewRound();
             }
         }
 
@@ -408,14 +416,26 @@ namespace GameCardLibrary
                 if (check.PlayerWonWithBlackjack(player, _dealer))
                 {
                     BlackJackEvent?.Invoke(this, () => player);
-                    player.StateText = "Blackjack";
+                    player.StateText = State.Blackjack.ToString();
                     Debug.WriteLine("BlackJackEvent sent");
                 }
                 else if (check.IsBust(player.Hand))
                 {
                     PlayerBustEvent?.Invoke(this, () => player);
-                    player.StateText = "Bust";
+                    player.StateText = State.Bust.ToString();
                     Debug.WriteLine("PlayerBustEvent sent");
+                }
+                else if (check.IsTie(player, _dealer))
+                {
+                    player.StateText = State.Tie.ToString();
+                }
+                else if (check.PlayerWon(player, _dealer))
+                {
+                    player.StateText = State.Winner.ToString();
+                }
+                else if (check.DealerWon(player, _dealer))
+                {
+                    player.StateText = State.Loser.ToString();
                 }
             }
 

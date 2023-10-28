@@ -34,7 +34,7 @@ namespace BlackJack.MVVM.ViewModel
             set
             {
                 _numberOfPlayers = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
 

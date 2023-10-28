@@ -27,6 +27,16 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
+        <Button Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Content="Next round" 
+                Style="{StaticResource BasicButton}"
+                Width="100"
+                Height="20"
+                Margin="-140,-250,0,0"
+                Command="{Binding NextRoundCommand}"/>
+
         <StackPanel Grid.Column="1"
                     Grid.ColumnSpan="2"
                     Orientation="Horizontal">
