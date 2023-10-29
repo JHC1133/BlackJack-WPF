@@ -531,6 +531,7 @@ namespace GameCardLibrary
 
                 if (playerStats == null)
                 {
+                    // Add
                     playerStats = new PlayerStatistics
                     {
                         PlayerName = playerName,
@@ -543,6 +544,7 @@ namespace GameCardLibrary
                 }
                 else
                 {
+                    // Change
                     playerStats.Wins += player.Wins;
                     playerStats.Busts += player.Busts;
                     playerStats.Ties += player.Ties;
