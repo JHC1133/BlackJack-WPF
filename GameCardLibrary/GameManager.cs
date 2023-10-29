@@ -429,7 +429,7 @@ namespace GameCardLibrary
                 }
                 GameConditionsCheck();
                 NextRoundBtnVisible = true;
-            }
+            } 
         }
 
         public void BlackJackCheck()
