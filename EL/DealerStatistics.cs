@@ -14,6 +14,7 @@ namespace EL
         public int Busts { get; set; }
         public int Ties { get; set; }
         public int Losses { get; set; }
+
         [Key]
         public string Name { get; set; }
 

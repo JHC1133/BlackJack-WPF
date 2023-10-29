@@ -529,11 +529,26 @@ namespace GameCardLibrary
 
                 PlayerStatistics playerStats = DALhandler.GetPlayerStatistics(playerName);
 
-                playerStats.Wins += player.Wins;
-                playerStats.Busts += player.Busts;
-                playerStats.Ties += player.Ties;
-                playerStats.Losses += player.Losses;
-                playerStats.Blackjacks += player.Blackjacks;
+                if (playerStats == null)
+                {
+                    playerStats = new PlayerStatistics
+                    {
+                        PlayerName = playerName,
+                        Wins = player.Wins,
+                        Busts = player.Busts,
+                        Ties = player.Ties,
+                        Losses = player.Losses,
+                        Blackjacks = player.Blackjacks
+                    };
+                }
+                else
+                {
+                    playerStats.Wins += player.Wins;
+                    playerStats.Busts += player.Busts;
+                    playerStats.Ties += player.Ties;
+                    playerStats.Losses += player.Losses;
+                    playerStats.Blackjacks += player.Blackjacks;
+                }              
 
                 DALhandler.UpdatePlayerStatistics(playerStats);
             }
@@ -548,11 +563,26 @@ namespace GameCardLibrary
 
             DealerStatistics dealerStats = DALhandler.GetDealerStatistics();
 
-            dealerStats.Wins += _dealer.Wins;
-            dealerStats.Busts += _dealer.Busts;
-            dealerStats.Losses += _dealer.Losses;
-            dealerStats.Ties += _dealer.Ties;
-            dealerStats.Blackjacks += _dealer.Blackjacks;
+            if (dealerStats == null)
+            {
+                dealerStats = new DealerStatistics
+                {
+                    Name = _dealer.Name,
+                    Wins = _dealer.Wins,
+                    Busts = _dealer.Busts,
+                    Losses = _dealer.Losses,
+                    Blackjacks = _dealer.Blackjacks
+                };
+            }
+            else
+            {
+                dealerStats.Wins += _dealer.Wins;
+                dealerStats.Busts += _dealer.Busts;
+                dealerStats.Losses += _dealer.Losses;
+                dealerStats.Ties += _dealer.Ties;
+                dealerStats.Blackjacks += _dealer.Blackjacks;
+            }
+  
 
             DALhandler.UpdateDealerStatistics(dealerStats);
         }

@@ -1,6 +1,7 @@
 ﻿using EL;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,11 +23,30 @@ namespace DAL
 
         public void UpdatePlayerStatistics(PlayerStatistics playerStats)
         {
+
             using (var context = new GameDbContext())
             {
-                context.PlayerStatistics.Update(playerStats);
-                context.SaveChanges();
+                // Retrieve the existing PlayerStatistics record from the database
+                var existingPlayerStats = context.PlayerStatistics.FirstOrDefault(p => p.PlayerName == playerStats.PlayerName);
+
+                if (existingPlayerStats != null)
+                {
+                    existingPlayerStats.Wins += playerStats.Wins;
+                    existingPlayerStats.Busts += playerStats.Busts;
+                    existingPlayerStats.Ties += playerStats.Ties;
+                    existingPlayerStats.Losses += playerStats.Losses;
+                    existingPlayerStats.Blackjacks += playerStats.Blackjacks;
+
+                    context.SaveChanges();
+                }
+                else
+                {
+                    context.PlayerStatistics.Add(playerStats);
+                    context.SaveChanges();
+                }
             }
+
+            PrintPlayerTableContent();
         }
 
         public DealerStatistics GetDealerStatistics()
@@ -42,12 +62,67 @@ namespace DAL
 
         public void UpdateDealerStatistics(DealerStatistics dealerStats)
         {
+
             using (var context = new GameDbContext())
             {
+                // Retrieve the existing DealerStatistics record from the database
+                var existingDealerStats = context.DealerStatistics.FirstOrDefault();
 
-                context.DealerStatistics.Update(dealerStats);
-                context.SaveChanges();
+                if (existingDealerStats != null)
+                {
+                    existingDealerStats.Wins += dealerStats.Wins;
+                    existingDealerStats.Busts += dealerStats.Busts;
+                    existingDealerStats.Ties += dealerStats.Ties;
+                    existingDealerStats.Losses += dealerStats.Losses;
+                    existingDealerStats.Blackjacks += dealerStats.Blackjacks;
+
+                    context.SaveChanges();
+                }
+                else
+                {
+                    context.DealerStatistics.Add(dealerStats);
+                    context.SaveChanges();
+                }
+
+                PrintDealerTableContent();
             }
+        }
+
+        private void PrintDealerTableContent()
+        {
+            using (var context = new GameDbContext())
+            {
+                var dealerStats = context.DealerStatistics.SingleOrDefault();
+
+                Debug.WriteLine($"Dealer Name: {dealerStats.Name}");
+                Debug.WriteLine($"Wins: {dealerStats.Wins}");
+                Debug.WriteLine($"Busts: {dealerStats.Busts}");
+                Debug.WriteLine($"Ties: {dealerStats.Ties}");
+                Debug.WriteLine($"Losses: {dealerStats.Losses}");
+                Debug.WriteLine($"Blackjacks: {dealerStats.Blackjacks}");
+                Debug.WriteLine("");
+            }
+        }
+
+        private void PrintPlayerTableContent()
+        {
+            using (var context = new GameDbContext())
+            {
+                var playerStats = context.PlayerStatistics.ToList();
+
+                foreach (var playerStat in playerStats)
+                {
+                    Debug.WriteLine($"Player Name: {playerStat.PlayerName}");
+                    Debug.WriteLine($"Wins: {playerStat.Wins}");
+                    Debug.WriteLine($"Busts: {playerStat.Busts}");
+                    Debug.WriteLine($"Ties: {playerStat.Ties}");
+                    Debug.WriteLine($"Losses: {playerStat.Losses}");
+                    Debug.WriteLine($"Blackjacks: {playerStat.Blackjacks}");
+                    Debug.WriteLine("");
+                }
+            }
+
+            Debug.WriteLine("Playertable printed");
         }
 
     }

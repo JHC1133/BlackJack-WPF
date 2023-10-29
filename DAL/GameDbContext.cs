@@ -20,7 +20,7 @@ namespace DAL
         {
             //base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldbMDatabase=GameDb");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=GameDB");
         }
 
     }
