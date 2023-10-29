@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EL;
+using DAL;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -308,8 +310,14 @@ namespace GameCardLibrary
             }
         }
 
+        /// <summary>
+        /// Executes a new round. Resets hands, deal cards and checks for Blackjack
+        /// </summary>
         public void NewRound()
         {
+            UpdatePlayerStatistics();
+            UpdateDealerStatistics();
+
             ResetPlayers();
             ClearHands();
             DealCards();
@@ -432,6 +440,9 @@ namespace GameCardLibrary
             } 
         }
 
+        /// <summary>
+        /// Checks if player has blackjack
+        /// </summary>
         public void BlackJackCheck()
         {
             foreach (Player player in _players)
@@ -440,6 +451,7 @@ namespace GameCardLibrary
                 {
                     BlackJackEvent?.Invoke(this, () => player);
                     player.StateText = State.Blackjack.ToString();
+                    player.Blackjacks++;
                     Debug.WriteLine("BlackJackEvent sent");
                 }
             }
@@ -457,34 +469,92 @@ namespace GameCardLibrary
                 {
                     PlayerBustEvent?.Invoke(this, () => player);
                     player.StateText = State.Bust.ToString();
+                    player.Busts++;
+                    player.Losses++;
                     Debug.WriteLine("PlayerBustEvent sent");
                 }
                 else if (check.IsTie(player, _dealer))
                 {
                     player.StateText = State.Tie.ToString();
+                    player.Ties++;
+                    _dealer.Ties++;
                 }
                 else if (check.PlayerWon(player, _dealer) && !check.IsBust(player.Hand))
                 {
                     player.StateText = State.Winner.ToString();
+                    player.Wins++;
+                    _dealer.Losses++;
                 }
                 else if (check.PlayerWon(player, _dealer) && !check.IsBust(player.Hand) && check.IsBust(_dealer.Hand))
                 {
                     player.StateText = State.Winner.ToString();
+                    player.Wins++;
+                    _dealer.Losses++;
                 }
                 else if (check.DealerWon(player, _dealer) && !check.IsBust(_dealer.Hand))
                 {
                     player.StateText = State.Loser.ToString();
+                    player.Losses++;
+                    _dealer.Wins++;
                 }
                 else if (check.IsBust(_dealer.Hand))
                 {
                     DealerBustEvent?.Invoke(this, EventArgs.Empty);
                     player.StateText = State.Winner.ToString();
+                    _dealer.Busts++;
+                    _dealer.Losses++;
                 }
 
                 Debug.WriteLine(player.StateText);
             }
 
 
+        }
+
+        #endregion
+
+
+        #region DALCommunications
+
+        /// <summary>
+        /// Gets the current playerStatistics from the DAL and updates them with the current stats
+        /// </summary>
+        public void UpdatePlayerStatistics()
+        {
+            Handler DALhandler = new Handler();
+
+            foreach (Player player in _players)
+            {
+                string playerName = player.Name;
+
+                PlayerStatistics playerStats = DALhandler.GetPlayerStatistics(playerName);
+
+                playerStats.Wins += player.Wins;
+                playerStats.Busts += player.Busts;
+                playerStats.Ties += player.Ties;
+                playerStats.Losses += player.Losses;
+                playerStats.Blackjacks += player.Blackjacks;
+
+                DALhandler.UpdatePlayerStatistics(playerStats);
+            }
+        }
+
+        /// <summary>
+        /// Gets the current dealerStatistics from the DAL and updates them with the current stats
+        /// </summary>
+        public void UpdateDealerStatistics()
+        {
+            Handler DALhandler = new Handler();
+
+            DealerStatistics dealerStats = DALhandler.GetDealerStatistics();
+
+            dealerStats.Wins += _dealer.Wins;
+            dealerStats.Busts += _dealer.Busts;
+            dealerStats.Losses += _dealer.Losses;
+            dealerStats.Ties += _dealer.Ties;
+            dealerStats.Blackjacks += _dealer.Blackjacks;
+
+            DALhandler.UpdateDealerStatistics(dealerStats);
         }
 
         #endregion

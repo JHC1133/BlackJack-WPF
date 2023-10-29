@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -38,16 +39,18 @@ namespace GameCardLibrary
 
         private string _name;
         private string _stateText;
-        private int _playerID;
-
         private Hand _hand;
 
-
+        public int Wins { get; set; }
+        public int Blackjacks { get; set; }
+        public int Busts { get; set; }
+        public int Ties { get; set; }
+        public int Losses { get; set; }
         public bool IsFinished { get; set; }
         public bool Winner { get; set; }
         public bool IsBust { get; set; }
+        [Key]
         public string Name { get => _name; }
-        public int PlayerID { get => _playerID; }
         public Hand Hand { get => _hand; set => _hand = value; }
 
 
@@ -59,7 +62,7 @@ namespace GameCardLibrary
                 if (_stateText != value)
                 {
                     _stateText = value;
-                    OnPropertyChanged(); // Notify the UI of the property change
+                    OnPropertyChanged(); // Notifies the UI of the property change
                 }
             }
         }
@@ -67,7 +70,6 @@ namespace GameCardLibrary
         public Player(Hand hand, string name)
         {
             _name = name;
-            _playerID++;
             _hand = hand;
         }
 

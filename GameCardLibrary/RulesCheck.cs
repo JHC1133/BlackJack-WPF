@@ -41,6 +41,12 @@ namespace GameCardLibrary
             return false;
         }
 
+        /// <summary>
+        /// Returns true if player has Blackjack and is not at tie with the dealer
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="dealer"></param>
+        /// <returns></returns>
         public bool PlayerWonWithBlackjack(Player player, Dealer dealer)
         {
             if (IsBlackjack(player.Hand) && PlayerWon(player, dealer) && !IsTie(player, dealer))
