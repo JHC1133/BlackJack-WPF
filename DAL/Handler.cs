@@ -20,6 +20,21 @@ namespace DAL
             }
         }
 
+        public void CreateNewGame(List<string> playerNames)
+        {
+            using (var context = new GameDbContext())
+            {
+                var playerStatistics = context.PlayerStatistics.Where(stat => playerNames.Contains(stat.PlayerName)).ToList();
+
+                Game newGame = new Game
+                {
+                    DatePlayed = DateTime.Now,
+                    PlayerStatistics = playerStatistics,
+                    DealerStatistics = 
+                }
+            }
+        }
+
         public PlayerStatistics GetPlayerStatistics(string playerName)
         {
             using (var context = new GameDbContext())
