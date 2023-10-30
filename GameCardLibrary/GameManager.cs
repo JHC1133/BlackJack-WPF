@@ -43,7 +43,7 @@ namespace GameCardLibrary
             }
 
             Random rand = new Random();
-            int i = rand.Next(0, nameList.Count - 1);
+            int i = rand.Next(0, nameList.Count);
             string s = nameList[i];
             nameList.RemoveAt(i);
             return s;
@@ -188,7 +188,8 @@ namespace GameCardLibrary
                     "Sofia",
                     "Gorm",
                     "Zeke",
-                    "McThundertits"
+                    "McThundertits",
+                    "Croupier"
             };
         }
 
@@ -358,13 +359,16 @@ namespace GameCardLibrary
         /// </summary>
         public void NewRound()
         {
-            UpdatePlayerStatistics();
-            UpdateDealerStatistics();
-
             ResetPlayers();
             ClearHands();
             DealCards();
             BlackJackCheck();
+        }
+
+        public void UpdateStatistics()
+        {
+            UpdatePlayerStatistics();
+            UpdateDealerStatistics();
         }
 
         /// <summary>
@@ -488,17 +492,21 @@ namespace GameCardLibrary
         /// </summary>
         public void BlackJackCheck()
         {
-            foreach (Player player in _players)
+            if (_players != null)
             {
-                if (check.PlayerWonWithBlackjack(player, _dealer))
+                foreach (Player player in _players)
                 {
-                    BlackJackEvent?.Invoke(this, () => player);
-                    player.StateText = State.Blackjack.ToString();
-                    player.Blackjacks++;
-                    //Stand(player);
-                    Debug.WriteLine("BlackJackEvent sent");
+                    if (check.PlayerWonWithBlackjack(player, _dealer))
+                    {
+                        BlackJackEvent?.Invoke(this, () => player);
+                        player.StateText = State.Blackjack.ToString();
+                        player.Blackjacks++;
+                        //Stand(player);
+                        Debug.WriteLine("BlackJackEvent sent");
+                    }
                 }
             }
+           
         }
 
         /// <summary>
@@ -564,9 +572,10 @@ namespace GameCardLibrary
         /// <summary>
         /// Gets the current playerStatistics from the DAL and updates them with the current stats
         /// </summary>
-        public void UpdatePlayerStatistics()
+        private void UpdatePlayerStatistics()
         {
             Handler DALhandler = new Handler();
+            List<PlayerStatistics> updatedPlayerStats = new List<PlayerStatistics>();
 
             foreach (Player player in _players)
             {
@@ -595,16 +604,24 @@ namespace GameCardLibrary
                     playerStats.Ties += player.Ties;
                     playerStats.Losses += player.Losses;
                     playerStats.Blackjacks += player.Blackjacks;
-                }              
+                }
 
+                //DALhandler.UpdatePlayerStatistics(playerStats);
+                updatedPlayerStats.Add(playerStats);
+            }
+
+            foreach (PlayerStatistics playerStats in updatedPlayerStats)
+            {
                 DALhandler.UpdatePlayerStatistics(playerStats);
             }
+
+            DALhandler.PrintPlayerTableContent();
         }
 
         /// <summary>
         /// Gets the current dealerStatistics from the DAL and updates them with the current stats
         /// </summary>
-        public void UpdateDealerStatistics()
+        private void UpdateDealerStatistics()
         {
             Handler DALhandler = new Handler();
 

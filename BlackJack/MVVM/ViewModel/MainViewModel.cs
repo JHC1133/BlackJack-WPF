@@ -14,9 +14,12 @@ namespace BlackJack.MVVM.ViewModel
     class MainViewModel : ObservableObject
     {
 
+        GameManager _gameManager = GameManager.Instance;
+
         #region MVVM
         public RelayCommand OptionsViewCommand { get; set; }
         public RelayCommand PlayViewCommand { get; set; }
+        public RelayCommand QuitCommand { get; set; }
 
         public OptionsViewModel OptionsVM { get; set; }
         public PlayViewModel PlayVM { get; set; }
@@ -50,7 +53,15 @@ namespace BlackJack.MVVM.ViewModel
             PlayViewCommand = new RelayCommand(o =>
             {
                 CurrentView = PlayVM;
-                GameManager.Instance.BlackJackCheck();
+                _gameManager.BlackJackCheck();
+            });
+
+            QuitCommand = new RelayCommand(o =>
+            {
+
+                _gameManager.UpdateStatistics();
+                //Application.Current.Shutdown();
+
             });
         }
     }

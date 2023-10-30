@@ -42,11 +42,11 @@ namespace DAL
                 else
                 {
                     context.PlayerStatistics.Add(playerStats);
-                    context.SaveChanges();
                 }
+
+                    context.SaveChanges();
             }
 
-            PrintPlayerTableContent();
         }
 
         public DealerStatistics GetDealerStatistics()
@@ -102,6 +102,28 @@ namespace DAL
                     context.PlayerStatistics.Remove(playerToRemove);
                     context.SaveChanges();
                     Debug.WriteLine($"{playerToRemove} has been removed from the table");
+
+                    PrintPlayerTableContent();
+                }
+            }
+
+            if (playerName == "Croupier")
+            {
+                using (var context = new GameDbContext())
+                {
+
+                    var playerToRemove = (from player in context.DealerStatistics
+                                          where player.Name == playerName
+                                          select player).SingleOrDefault();
+
+                    if (playerToRemove != null)
+                    {
+                        context.DealerStatistics.Remove(playerToRemove);
+                        context.SaveChanges();
+                        Debug.WriteLine($"{playerToRemove} has been removed from the table");
+
+                        PrintPlayerTableContent();
+                    }
                 }
             }
         }
@@ -123,7 +145,7 @@ namespace DAL
         }
 
         
-        private void PrintPlayerTableContent()
+        public void PrintPlayerTableContent()
         {
             using (var context = new GameDbContext())
             {
@@ -137,11 +159,11 @@ namespace DAL
                     Debug.WriteLine($"Ties: {playerStat.Ties}");
                     Debug.WriteLine($"Losses: {playerStat.Losses}");
                     Debug.WriteLine($"Blackjacks: {playerStat.Blackjacks}");
-                    Debug.WriteLine("");
+                    Debug.WriteLine("Playertable printed");
                 }
             }
 
-            Debug.WriteLine("Playertable printed");
+                    Debug.WriteLine("");
         }
 
 
