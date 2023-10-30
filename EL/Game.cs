@@ -10,7 +10,9 @@ namespace EL
     {
 
         public int ID { get; set; }
-        //public ICollection<Player> Players { get; set; }
+        public DateTime DatePlayed { get; set; }
+        public DealerStatistics DealerStatistics { get; set; }
+        public ICollection<PlayerStatistics> PlayerStatistics { get; set; }
 
     }
 }

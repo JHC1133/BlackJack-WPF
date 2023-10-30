@@ -14,6 +14,7 @@ namespace DAL
 
         public DbSet<PlayerStatistics> PlayerStatistics { get; set; }
         public DbSet<DealerStatistics> DealerStatistics { get; set; }
+        public DbSet<Game> Games { get; set; }
         //public DbSet<Player> Players { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
