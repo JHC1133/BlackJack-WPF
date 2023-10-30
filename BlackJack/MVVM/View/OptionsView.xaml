@@ -11,38 +11,45 @@
     <UserControl.DataContext>
         <viewmodel:OptionsViewModel/>
     </UserControl.DataContext>
-    
-    <StackPanel>
-        <TextBlock Text="Set up your game"
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        
+        <StackPanel Grid.Column="0">
+            <TextBlock Text="Set up your game"
                    Foreground="White"
                    FontSize="28"
                    HorizontalAlignment="Left"
                    Margin="20,0,0,20"/>
 
-        <TextBlock Text="Number of players (2-4)"
+            <TextBlock Text="Number of players (2-4)"
                    Foreground="White"
                    FontSize="20"
                    HorizontalAlignment="Left"
                    Margin="20,0,0,5"/>
 
-        <TextBox x:Name="txtNumberOfPlayers"
+            <TextBox x:Name="txtNumberOfPlayers"
                  Text="{Binding NumberOfPlayers}"
                  Margin="20,0,0,10"
                  Width="100"
                  Height="20"
                  HorizontalAlignment="Left"
                  Style="{StaticResource OptionsTextBox}">
-            
 
-        </TextBox>
 
-        <TextBlock Text="Number of decks (1-4)"
+            </TextBox>
+
+            <TextBlock Text="Number of decks (1-4)"
                    Foreground="White"
                    FontSize="20"
                    HorizontalAlignment="Left"
                    Margin="20,0,0,5"/>
 
-        <TextBox x:Name="txtNumberOfDecks"
+            <TextBox x:Name="txtNumberOfDecks"
                  Text="{Binding NumberOfDecks}"
                  Margin="20,0,0,10"
                  Width="100"
@@ -51,10 +58,10 @@
                  IsEnabled="True"
                  Style="{StaticResource OptionsTextBox}">
 
-            
-        </TextBox>
 
-        <Button x:Name="btnOptionsSave"
+            </TextBox>
+
+            <Button x:Name="btnOptionsSave"
                 Content="Save"
                 Width="75"
                 Height="20"
@@ -62,8 +69,45 @@
                 Margin="34,0,0,0"
                 Style="{StaticResource BasicButton}"
                 Click="btnOptionsSave_Click">
-            
-        </Button>
-    </StackPanel>
+
+            </Button>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="Statistics"
+                   Foreground="White"
+                   FontSize="28"
+                   HorizontalAlignment="Left"
+                   Margin="20,0,0,20"/>
+
+            <TextBlock Text="Remove from database"
+                   Foreground="White"
+                   FontSize="20"
+                   HorizontalAlignment="Left"
+                   Margin="20,0,0,5"/>
+
+            <ComboBox x:Name="cbNameList"
+                      ItemsSource="{Binding GameManager.FixedNameList}"
+                      SelectedItem="{Binding SelectedPlayer}"
+                      HorizontalAlignment="Left"
+                      Width="100"
+                      Margin="20,0,0,10">
+                
+                
+            </ComboBox>
+
+            <Button x:Name="btnOptionsRemove"
+                        Content="Remove"
+                        Width="75"
+                        Height="20"
+                        HorizontalAlignment="Left"
+                        Margin="34,0,0,0"
+                        Style="{StaticResource BasicButton}"
+                        Command="{Binding RemoveFromTableCommand}">
+
+            </Button>
+        </StackPanel>
+    </Grid>
+    
         
 </UserControl>

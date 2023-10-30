@@ -26,7 +26,6 @@ namespace GameCardLibrary
         ObservableCollection<Card> _observableHandCollection;
         public Card LastCard { get; }
         public int NumberOfCards { get => _numberOfCards; }
-        //public int Score { get => _score; set => _score = value; } // Lambda?
 
         public int Score
         {
@@ -91,6 +90,7 @@ namespace GameCardLibrary
         {
             _cards.Clear();
             _observableHandCollection.Clear();
+            _numberOfCards = 0;
         }
 
         public override string ToString()

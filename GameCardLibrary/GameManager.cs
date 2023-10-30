@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GameCardLibrary
 {
@@ -21,6 +22,7 @@ namespace GameCardLibrary
         Deck _deck;
         Random rand;
 
+        List<string> _fixedNameList;
         List<string> _nameList;
         List<Player> _players;
         List<Deck> _decks;
@@ -28,9 +30,26 @@ namespace GameCardLibrary
 
         private int _numberOfPlayers;
         private int _numberOfDecks;
-
         private bool _nextRoundBtnVisible;
 
+        // Lambda statement
+        private string PlayerName => RandomizeNameFunc(NameList);
+
+        private Func<List<string>, string> RandomizeNameFunc = (nameList) =>
+        {
+            if (nameList.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            Random rand = new Random();
+            int i = rand.Next(0, nameList.Count - 1);
+            string s = nameList[i];
+            nameList.RemoveAt(i);
+            return s;
+        };
+
+        #region Events
         //public event EventHandler<EventArgs> DealerHitEvent;
         public event EventHandler<Func<Player>> PlayerBustEvent;
         public event EventHandler<Func<Player>> BlackJackEvent;
@@ -43,6 +62,8 @@ namespace GameCardLibrary
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion
+
 
         public bool NextRoundBtnVisible
         {
@@ -78,13 +99,15 @@ namespace GameCardLibrary
         public int NumberOfDecks { get => _numberOfDecks; }
         public Dealer Dealer { get => _dealer; set => _dealer = value; }
         public  ObservableCollection<Player> ObservablePlayers { get => _observablePlayers; set => _observablePlayers = value; }
+        public List<string> NameList { get => _nameList; set => _nameList = value; }
+        public List<string> FixedNameList { get => _fixedNameList; set => _fixedNameList = value; }
 
         private GameManager()
         {
             rand = new Random();
             check = new RulesCheck();
+            InitializePlayerNames();
 
-            
         }
 
         #region Setters and Initializers
@@ -93,7 +116,7 @@ namespace GameCardLibrary
             SetNumberOfPlayers(numberOfPlayers);
             SetNumberOfDecks(numberOfDecks);
             InitializeGameDeck(numberOfDecks);
-            InitializePlayerNames();
+            //InitializePlayerNames();
             InitializePlayers(numberOfPlayers);
             InitializeDealer();
             InitializeObservableList();
@@ -132,7 +155,25 @@ namespace GameCardLibrary
         /// </summary>
         private void InitializePlayerNames()
         {
-            _nameList = new List<string>
+            NameList = new List<string>
+            {
+                    "Joar",
+                    "Farid",
+                    "Wilmer",
+                    "Simon",
+                    "Marco",
+                    "Brandon",
+                    "Kristoffer",
+                    "Dick",
+                    "Jose",
+                    "Kevin",
+                    "Sofia",
+                    "Gorm",
+                    "Zeke",
+                    "McThundertits"
+            };
+
+            FixedNameList = new List<string>
             {
                     "Joar",
                     "Farid",
@@ -158,11 +199,13 @@ namespace GameCardLibrary
         private string RandomizeName()
         {
             Random rand = new Random();
-            int i = rand.Next(0, _nameList.Count - 1);
-            string s = _nameList[i];
-            _nameList.RemoveAt(i);
+            int i = rand.Next(0, NameList.Count - 1);
+            string s = NameList[i];
+            NameList.RemoveAt(i);
             return s;
         }
+
+        
 
         /// <summary>
         /// Intializes the players and gives them two cards. Needs to be initialized after InitiliazeGameDeck()
@@ -181,7 +224,7 @@ namespace GameCardLibrary
                 playerHand.AddCard(_decks[randomDeckValue].DrawCard());
                 playerHand.AddCard(_decks[randomDeckValue].DrawCard());
 
-                Player player = new Player(playerHand, RandomizeName());
+                Player player = new Player(playerHand, PlayerName);
                 _players.Add(player);
 
 
@@ -452,6 +495,7 @@ namespace GameCardLibrary
                     BlackJackEvent?.Invoke(this, () => player);
                     player.StateText = State.Blackjack.ToString();
                     player.Blackjacks++;
+                    //Stand(player);
                     Debug.WriteLine("BlackJackEvent sent");
                 }
             }
@@ -471,6 +515,7 @@ namespace GameCardLibrary
                     player.StateText = State.Bust.ToString();
                     player.Busts++;
                     player.Losses++;
+                    //Stand(player);
                     Debug.WriteLine("PlayerBustEvent sent");
                 }
                 else if (check.IsTie(player, _dealer))
@@ -587,6 +632,15 @@ namespace GameCardLibrary
   
 
             DALhandler.UpdateDealerStatistics(dealerStats);
+        }
+
+        public void RemoveFromTable(string playerName)
+        {
+            Handler DALhandler = new Handler();
+
+            DALhandler.RemoveItemFromTable(playerName);
+
+            Debug.WriteLine("GameManager.RemoveFromTable() called");
         }
 
         #endregion

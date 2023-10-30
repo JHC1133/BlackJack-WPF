@@ -88,6 +88,24 @@ namespace DAL
             }
         }
 
+        public void RemoveItemFromTable(string playerName)
+        {
+            using (var context = new GameDbContext())
+            {
+
+                var playerToRemove = (from player in context.PlayerStatistics
+                                      where player.PlayerName == playerName
+                                      select player).SingleOrDefault();
+
+                if (playerToRemove != null)
+                {
+                    context.PlayerStatistics.Remove(playerToRemove);
+                    context.SaveChanges();
+                    Debug.WriteLine($"{playerToRemove} has been removed from the table");
+                }
+            }
+        }
+
         private void PrintDealerTableContent()
         {
             using (var context = new GameDbContext())
@@ -104,6 +122,7 @@ namespace DAL
             }
         }
 
+        
         private void PrintPlayerTableContent()
         {
             using (var context = new GameDbContext())
@@ -124,6 +143,7 @@ namespace DAL
 
             Debug.WriteLine("Playertable printed");
         }
+
 
     }
 }

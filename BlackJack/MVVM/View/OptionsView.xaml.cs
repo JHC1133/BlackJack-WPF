@@ -87,6 +87,11 @@ namespace BlackJack.MVVM.View
 
             ((OptionsViewModel)DataContext).SaveCommand.Execute(null);
 
+            if (cbNameList != null)
+            {
+
+            }
+
         }
     }
 }

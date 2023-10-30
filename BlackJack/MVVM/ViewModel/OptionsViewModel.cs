@@ -17,6 +17,8 @@ namespace BlackJack.MVVM.ViewModel
         Helper helper;
         GameManager _gameManager = GameManager.Instance;
 
+        private string _selectedPlayer;
+
         private int _numberOfPlayers = 4;
         private int _numberOfDecks = 4;
 
@@ -27,46 +29,34 @@ namespace BlackJack.MVVM.ViewModel
 
         private bool _optionsSaved;
 
-        public int NumberOfPlayers
-        {
-            get
-            {
-                return _numberOfPlayers;
-            }
-            set
-            {
-                _numberOfPlayers = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int NumberOfDecks
-        {
-            get
-            {
-                return _numberOfDecks;
-            }
-            set
-            {
-                _numberOfDecks = value;
-                OnPropertyChanged();
-            }
-        }
 
         /// <summary>
         /// Holds an Execute and CanExecute method, which executes respectively checks if the execution is possible. In this case will be used for saving data on the OptionsView
         /// </summary>
         public ICommand SaveCommand { get; }
+        public ICommand RemoveFromTableCommand { get; }
         public bool OptionsSaved { get => _optionsSaved; set => _optionsSaved = value; }
+        public GameManager GameManager { get => _gameManager; set => _gameManager = value; }
+        public int NumberOfPlayers { get => _numberOfPlayers; set => _numberOfPlayers = value; }
+        public int NumberOfDecks { get => _numberOfDecks; set => _numberOfDecks = value; }
+        public string SelectedPlayer { get => _selectedPlayer; set => _selectedPlayer = value; }
 
         public OptionsViewModel()
         {
             SaveCommand = new RelayCommand(ExecuteSave, CanExecuteSave);
+            RemoveFromTableCommand = new RelayCommand(o => ExecuteRemove());
             helper = new Helper();
         }
 
+        private void ExecuteRemove()
+        {
+            if (SelectedPlayer != null)
+            {
+                _gameManager.RemoveFromTable(SelectedPlayer);
+            }
+        }
 
-        public bool CanExecuteSave(object parameter)
+        private bool CanExecuteSave(object parameter)
         {
             //returns true if
             return OptionsValueCheck();
@@ -76,7 +66,7 @@ namespace BlackJack.MVVM.ViewModel
         {
             if (CanExecuteSave(parameter))
             {
-                _gameManager.InitilizeGame(_numberOfDecks, _numberOfPlayers);
+                GameManager.InitilizeGame(NumberOfDecks, NumberOfPlayers);
 
                 OptionsSaved = true;
             }
@@ -91,8 +81,8 @@ namespace BlackJack.MVVM.ViewModel
         /// </summary>
         private bool OptionsValueCheck()
         {
-            bool correctAmountPlayers = helper.WithinMinMaxValueCheck(_minNumberOfPlayers, _maxNumberOfPlayers, _numberOfPlayers);
-            bool correctAmountDecks = helper.WithinMinMaxValueCheck(_minNumberOfDecks, _maxNumberOfDecks, _numberOfDecks);
+            bool correctAmountPlayers = helper.WithinMinMaxValueCheck(_minNumberOfPlayers, _maxNumberOfPlayers, NumberOfPlayers);
+            bool correctAmountDecks = helper.WithinMinMaxValueCheck(_minNumberOfDecks, _maxNumberOfDecks, NumberOfDecks);
 
             if (correctAmountPlayers && correctAmountDecks)
             {
