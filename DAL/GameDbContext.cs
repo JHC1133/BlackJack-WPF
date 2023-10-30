@@ -15,6 +15,7 @@ namespace DAL
         public DbSet<PlayerStatistics> PlayerStatistics { get; set; }
         public DbSet<DealerStatistics> DealerStatistics { get; set; }
         public DbSet<Game> Games { get; set; }
+
         //public DbSet<Player> Players { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -22,6 +23,13 @@ namespace DAL
             //base.OnConfiguring(optionsBuilder);
 
             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=GameDB");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Game>().Property(g => g.ID).ValueGeneratedOnAdd();
         }
 
     }

@@ -11,6 +11,15 @@ namespace DAL
     public class Handler
     {
 
+        public void AddGame(Game game)
+        {
+            using (var context = new GameDbContext())
+            {
+                context.Games.Add(game);
+                context.SaveChanges();
+            }
+        }
+
         public PlayerStatistics GetPlayerStatistics(string playerName)
         {
             using (var context = new GameDbContext())
