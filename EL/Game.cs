@@ -10,7 +10,7 @@ namespace EL
     {
 
         public int ID { get; set; }
-        public ICollection<Player> Players { get; set; }
+        //public ICollection<Player> Players { get; set; }
 
     }
 }
