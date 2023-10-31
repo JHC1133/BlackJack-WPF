@@ -20,7 +20,9 @@ namespace BlackJack.MVVM.ViewModel
         public RelayCommand OptionsViewCommand { get; set; }
         public RelayCommand PlayViewCommand { get; set; }
         public RelayCommand QuitCommand { get; set; }
+        public RelayCommand StatsViewCommand { get; set; }
 
+        public StatsViewModel StatsVM { get; set; }
         public OptionsViewModel OptionsVM { get; set; }
         public PlayViewModel PlayVM { get; set; }
 
@@ -42,9 +44,12 @@ namespace BlackJack.MVVM.ViewModel
         {
             OptionsVM = new OptionsViewModel();
             PlayVM = new PlayViewModel();
+            StatsVM = new StatsViewModel();
 
             CurrentView = OptionsVM; // Setting the default view
            
+            // Lambda expressions 
+
             OptionsViewCommand = new RelayCommand(o =>
             {
                 CurrentView = OptionsVM;
@@ -54,6 +59,11 @@ namespace BlackJack.MVVM.ViewModel
             {
                 CurrentView = PlayVM;
                 _gameManager.BlackJackCheck();
+            });
+
+            StatsViewCommand = new RelayCommand(o =>
+            {
+                CurrentView = StatsVM;
             });
 
             QuitCommand = new RelayCommand(o =>

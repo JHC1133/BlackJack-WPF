@@ -1,7 +1,9 @@
 ﻿using BlackJack.Core;
+using EL;
 using GameCardLibrary;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -29,6 +31,18 @@ namespace BlackJack.MVVM.ViewModel
 
         private bool _optionsSaved;
 
+        private ObservableCollection<Game> games;
+
+        public ObservableCollection<Game> Games
+        {
+            get { return games; }
+            set
+            {
+                games = value;
+                OnPropertyChanged(nameof(Games));
+            }
+        }
+
 
         /// <summary>
         /// Holds an Execute and CanExecute method, which executes respectively checks if the execution is possible. In this case will be used for saving data on the OptionsView
@@ -46,6 +60,8 @@ namespace BlackJack.MVVM.ViewModel
             SaveCommand = new RelayCommand(ExecuteSave, CanExecuteSave);
             RemoveFromTableCommand = new RelayCommand(o => ExecuteRemove());
             helper = new Helper();
+
+            Games = new ObservableCollection<Game>(_gameManager.GetGames());
         }
 
         private void ExecuteRemove()

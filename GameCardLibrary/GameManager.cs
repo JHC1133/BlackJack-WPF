@@ -597,6 +597,24 @@ namespace GameCardLibrary
             DALhandler.UpdateGame();
         }
 
+        public List<Game> GetGames()
+        {
+            Handler DALhandler = new Handler();
+            return DALhandler.GetGames();
+        }
+
+        public List<PlayerStatistics> GetPlayers()
+        {
+            Handler DALhandler = new Handler();
+            return DALhandler.GetPlayers();
+        }
+
+        public List<DealerStatistics> GetDealer()
+        {
+            Handler DALhandler = new Handler();
+            return DALhandler.GetDealer();
+        }
+
         /// <summary>
         /// Gets the current playerStatistics from the DAL and updates them with the current stats
         /// </summary>

@@ -59,12 +59,20 @@
                              Style="{StaticResource MenuButtonTheme}"
                              Command="{Binding OptionsViewCommand}"/>
 
+                <RadioButton Content="Statistics view"
+                             Height="50"
+                             Foreground="White"
+                             FontSize="14"
+                             Style="{StaticResource MenuButtonTheme}"
+                             Command="{Binding StatsViewCommand}"/>
+                
                 <RadioButton Content="Quit"
                              Height="50"
                              Foreground="White"
                              FontSize="14"
                              Style="{StaticResource MenuButtonTheme}"
                              Command="{Binding QuitCommand}"/>
+
 
 
 

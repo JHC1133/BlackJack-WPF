@@ -17,8 +17,8 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
-        
+
+
         <StackPanel Grid.Column="0">
             <TextBlock Text="Set up your game"
                    Foreground="White"
@@ -92,8 +92,8 @@
                       HorizontalAlignment="Left"
                       Width="100"
                       Margin="20,0,0,10">
-                
-                
+
+
             </ComboBox>
 
             <Button x:Name="btnOptionsRemove"
@@ -106,8 +106,15 @@
                         Command="{Binding RemoveFromTableCommand}">
 
             </Button>
+
+            <DataGrid Width="300"
+                      Height="200"
+                      Margin="20,50,0,0"
+                      HorizontalAlignment="Left"
+                      ItemsSource="{Binding Games}">
+                
+            </DataGrid>
+            
         </StackPanel>
     </Grid>
-    
-        
 </UserControl>

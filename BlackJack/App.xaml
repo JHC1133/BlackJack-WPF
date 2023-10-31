@@ -21,7 +21,11 @@
                 <view:PlayView/>
             </DataTemplate>
 
-            
+            <DataTemplate DataType="{x:Type viewModel:StatsViewModel}">
+                <view:StatsView/>
+            </DataTemplate>
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

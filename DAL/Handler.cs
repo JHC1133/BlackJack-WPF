@@ -11,7 +11,9 @@ namespace DAL
 {
     public class Handler
     {
+        #region Game
 
+        
         /// <summary>
         /// Creates a Game in the Game table
         /// </summary>
@@ -120,6 +122,38 @@ namespace DAL
             PrintGameTableContent();
         }
 
+        /// <summary>
+        /// Returns Games from Game table to list, for use with the DataGridView in the UI
+        /// </summary>
+        /// <returns></returns>
+        public List<Game> GetGames()
+        {
+            using (var context = new GameDbContext())
+            {
+                //return context.Games.ToList();
+                return context.Games.Include(g => g.GamePlayerStatisticsIntermediary).Include(g => g.DealerStatistics).ToList();
+            }
+        }
+
+        #endregion
+
+        #region Player
+
+        public List<PlayerStatistics> GetPlayers()
+        {
+            using (var context = new GameDbContext())
+            {
+                return context.PlayerStatistics.ToList();
+
+                //return context.GamePlayerStatisticsIntermediary
+                //      .Include(gp => gp.Game)
+                //      .Include(gp => gp.PlayerStatistics)
+                //      .Where(gp => gp.Game == selectedGame)
+                //      .ToList();
+            }
+        }
+
+
         public PlayerStatistics GetPlayerStatistics(string playerName)
         {
             using (var context = new GameDbContext())
@@ -128,7 +162,7 @@ namespace DAL
 
                 return playerStats;
             }
-        }
+        }  
 
         /// <summary>
         /// Updates playerstats if exisiting, if not adds them to a new row in the table
@@ -160,6 +194,18 @@ namespace DAL
                     context.SaveChanges();
             }
 
+        }
+
+        #endregion
+
+        #region Dealer
+
+        public List<DealerStatistics> GetDealer()
+        {
+            using (var context = new GameDbContext())
+            {
+                return context.DealerStatistics.ToList();
+            }
         }
 
         public DealerStatistics GetDealerStatistics()
@@ -205,6 +251,11 @@ namespace DAL
             }
         }
 
+        #endregion
+
+        #region Remove
+
+        
         /// <summary>
         /// Takes the player name (can also be the dealer name) and removes it from either the playerStatistics or dealerStatistics table. As the names are the primary key for the tables.
         /// </summary>
@@ -272,6 +323,12 @@ namespace DAL
                 }
             }
         }
+
+        #endregion
+
+        #region Print
+
+       
 
         private void PrintDealerTableContent()
         {
@@ -349,6 +406,6 @@ namespace DAL
                     Debug.WriteLine("");
         }
 
-
+        #endregion
     }
 }
