@@ -15,9 +15,6 @@ namespace DAL
         public DbSet<PlayerStatistics> PlayerStatistics { get; set; }
         public DbSet<DealerStatistics> DealerStatistics { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<GameStatistics> GameStatistics { get; set;}
-
-        //public DbSet<Player> Players { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,23 +28,11 @@ namespace DAL
 
             modelBuilder.Entity<Game>().Property(g => g.ID).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<GameStatistics>()
-        .HasKey(gs => new { gs.GameID, gs.PlayerName, gs.DealerName });
+            modelBuilder.Entity<Game>().HasKey(g => g.ID);
 
-            modelBuilder.Entity<GameStatistics>()
-                .HasOne(gs => gs.Game)
-                .WithMany(g => g.GameStatistics)
-                .HasForeignKey(gs => gs.GameID);
+            //modelBuilder.Entity<Game>().HasOne(g => g.PlayerStatistics).WithMany(ps => ps.Games).HasForeignKey(g => g.PlayerName);
 
-            modelBuilder.Entity<GameStatistics>()
-                .HasOne(gs => gs.PlayerStatistics)
-                .WithMany(p => p.GameStatistics)
-                .HasForeignKey(gs => gs.PlayerName);
-
-            modelBuilder.Entity<GameStatistics>()
-                .HasOne(gs => gs.DealerStatistics)
-                .WithMany(d => d.GameStatistics)
-                .HasForeignKey(gs => gs.DealerName);
+            modelBuilder.Entity<Game>().HasOne(g => g.DealerStatistics).WithMany(ds => ds.Games).HasForeignKey(g => g.DealerName);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -19,7 +19,8 @@ namespace EL
         [Key]
         public string PlayerName { get; set; }
 
-        // Navigation property for the join table
-        public List<GameStatistics> GameStatistics { get; set; }
+        // Navigation property
+        public List<Game> Games { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EL;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,39 +12,90 @@ namespace DAL
     public class Handler
     {
 
-        public void CreateNewGame(List<string> playerNames)
+        /// <summary>
+        /// Creates a Game in the Game table
+        /// </summary>
+        /// <param name="playerNames"></param>
+        /// <param name="dealerName"></param>
+        public void CreateNewGame(List<string> playerNames, string dealerName)
         {
             using (var context = new GameDbContext())
             {
-                var playerStatistics = context.PlayerStatistics.Where(stat => playerNames.Contains(stat.PlayerName)).ToList();
-                var dealerStatistics = context.DealerStatistics.FirstOrDefault();
-
-                Game newGame = new Game
+                var game = new Game
                 {
                     DatePlayed = DateTime.Now,
-                    GameStatistics = new List<GameStatistics>()
+                    DealerName = dealerName
                 };
 
-                // Associate players with the game
+                game.DealerStatistics = new DealerStatistics
+                {
+                    Name = dealerName
+                };
+
                 foreach (var playerName in playerNames)
                 {
-                    var playerStat = playerStatistics.FirstOrDefault(ps => ps.PlayerName == playerName);
-                    if (playerStat != null)
+                    game.PlayerStatistics.Add(new PlayerStatistics
                     {
-                        newGame.GameStatistics.Add(new GameStatistics
-                        {
-                            PlayerStatistics = playerStat,
-                            DealerStatistics = dealerStatistics,
-                        });
+                        PlayerName = playerName
+                    });
+                }
+
+                context.Games.Add(game);
+                context.SaveChanges();
+            }
+        }
+
+
+        /// <summary>
+        /// Updates the current game in the Game table. Should be called just before the shutting down of the Blackjack application
+        /// </summary>
+        public void UpdateGame()
+        {
+            using (var context = new GameDbContext())
+            {
+                // Gets the latest (current) game added
+                var game = context.Games.Include(g => g.PlayerStatistics).Include(g => g.DealerStatistics).OrderByDescending(g => g.DatePlayed).FirstOrDefault();
+
+                if (game == null)
+                {
+                    Debug.WriteLine("There was no game in the table");
+                    return;
+                }
+
+
+                foreach (var playerStats in game.PlayerStatistics)
+                {
+                    var playerName = playerStats.PlayerName;
+                    var updatedPlayerStats = GetPlayerStatistics(playerName);
+
+                    if (updatedPlayerStats != null)
+                    {
+                        playerStats.Wins = updatedPlayerStats.Wins;
+                        playerStats.Blackjacks = updatedPlayerStats.Blackjacks;
+                        playerStats.Busts = updatedPlayerStats.Busts;
+                        playerStats.Losses = updatedPlayerStats.Losses;
+                        playerStats.Ties = updatedPlayerStats.Ties;
                     }
                 }
 
-                context.Games.Add(newGame);
+                var dealerStats = game.DealerStatistics;
+
+                if (dealerStats != null)
+                {
+                    var updatedDealerStats = GetDealerStatistics();
+
+                    if (updatedDealerStats != null)
+                    {
+                        dealerStats.Wins = updatedDealerStats.Wins;
+                        dealerStats.Blackjacks = updatedDealerStats.Blackjacks;
+                        dealerStats.Busts = updatedDealerStats.Busts;
+                        dealerStats.Losses = updatedDealerStats.Losses;
+                        dealerStats.Ties = updatedDealerStats.Ties;
+                    }
+                }
+
                 context.SaveChanges();
             }
-
-            PrintGameTableContent();
-            Debug.WriteLine("GameTablePrintedAbove");
         }
 
         public PlayerStatistics GetPlayerStatistics(string playerName)
@@ -182,35 +234,7 @@ namespace DAL
 
         private void PrintGameTableContent()
         {
-            using (var context = new GameDbContext())
-            {
-                var games = context.Games.ToList();
-                foreach (var game in games)
-                {
-                    Debug.WriteLine($"Game ID: {game.ID}");
-                    Debug.WriteLine($"Game Date: {game.DatePlayed}");
-                    Debug.WriteLine("Player Statistics:");
-                    foreach (var gameStat in game.GameStatistics)
-                    {
-                        Debug.WriteLine($"  Player Name: {gameStat.PlayerStatistics.PlayerName}");
-                        Debug.WriteLine($"  Wins: {gameStat.PlayerStatistics.Wins}");
-                        Debug.WriteLine($"  Blackjacks: {gameStat.PlayerStatistics.Blackjacks}");
-                        Debug.WriteLine($"  Busts: {gameStat.PlayerStatistics.Busts}");
-                        Debug.WriteLine($"  Ties: {gameStat.PlayerStatistics.Ties}");
-                        Debug.WriteLine($"  Losses: {gameStat.PlayerStatistics.Losses}");
-                    }
-
-                    foreach (var gameStat in game.GameStatistics)
-                    {
-                        Debug.WriteLine($"Dealer Wins: {gameStat.DealerStatistics.Wins}");
-                        Debug.WriteLine($"Dealer Blackjacks: {gameStat.DealerStatistics.Blackjacks}");
-                        Debug.WriteLine($"Dealer Busts: {gameStat.DealerStatistics.Busts}");
-                        Debug.WriteLine($"Dealer Ties: {gameStat.DealerStatistics.Ties}");
-                        Debug.WriteLine($"Dealer Losses: {gameStat.DealerStatistics.Losses}");
-                    }
-                    
-                }
-            }
+           
         }
 
         
