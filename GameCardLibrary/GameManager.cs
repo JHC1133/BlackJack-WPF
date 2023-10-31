@@ -113,7 +113,11 @@ namespace GameCardLibrary
         #region Setters and Initializers
 
 
-
+        /// <summary>
+        /// Initializes the game with a given number of players and a number of decks. Initializes the dealer. Creates a new row in the Games table via the DAL.
+        /// </summary>
+        /// <param name="numberOfDecks"></param>
+        /// <param name="numberOfPlayers"></param>
         public void InitilizeGame(int numberOfDecks, int numberOfPlayers)
         {
             SetNumberOfPlayers(numberOfPlayers);

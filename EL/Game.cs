@@ -16,11 +16,6 @@ namespace EL
         public int ID { get; set; }
         public DateTime DatePlayed { get; set; }
 
-        // Navigation properties
-
-        //[ForeignKey("PlayerName")]
-        //public string PlayerName { get; set; }
-
         // Navigation property
         public List<GamePlayerStatisticsIntermediary> GamePlayerStatisticsIntermediary { get; set; }
 

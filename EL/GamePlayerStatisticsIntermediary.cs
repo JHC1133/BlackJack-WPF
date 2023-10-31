@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace EL
 {
+    /// <summary>
+    /// Used as an intermediary between Game and PlayerStatistics in order to achieve a many-to-many relation between them
+    /// </summary>
     public class GamePlayerStatisticsIntermediary
     {
         [Key]

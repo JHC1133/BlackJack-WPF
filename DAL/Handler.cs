@@ -66,9 +66,7 @@ namespace DAL
         public void UpdateGame()
         {
             using (var context = new GameDbContext())
-            {
-                // Gets the latest (current) game added
-                //var game = context.Games.Include(g => g.PlayerStatistics).Include(g => g.DealerStatistics).OrderByDescending(g => g.DatePlayed).FirstOrDefault();
+            {             
 
                 // Gets the latest (current) game added
                 var game = context.Games
@@ -99,21 +97,6 @@ namespace DAL
                         gamePlayerStats.PlayerStatistics.Ties = updatedPlayerStats.Ties;
                     }
                 }
-
-                //foreach (var playerStats in game.GamePlayerStatisticsIntermediary)
-                //{
-                //    var playerName = playerStats.PlayerName;
-                //    var updatedPlayerStats = GetPlayerStatistics(playerName);
-
-                //    if (updatedPlayerStats != null)
-                //    {
-                //        playerStats.Wins = updatedPlayerStats.Wins;
-                //        playerStats.Blackjacks = updatedPlayerStats.Blackjacks;
-                //        playerStats.Busts = updatedPlayerStats.Busts;
-                //        playerStats.Losses = updatedPlayerStats.Losses;
-                //        playerStats.Ties = updatedPlayerStats.Ties;
-                //    }
-                //}
 
                 var dealerStats = game.DealerStatistics;
 
@@ -274,7 +257,11 @@ namespace DAL
         {
             using (var context = new GameDbContext())
             {
-                var games = context.Games.Include(g => g.GamePlayerStatisticsIntermediary).Include(g => g.DealerStatistics).ToList();
+                var games = context.Games
+                    .Include(g => g.GamePlayerStatisticsIntermediary)
+                    .ThenInclude(gp => gp.PlayerStatistics)
+                    .Include(g => g.DealerStatistics)
+                    .ToList();
 
                 foreach (var game in games)
                 {
@@ -287,7 +274,17 @@ namespace DAL
                     foreach (var gamePlayerStats in game.GamePlayerStatisticsIntermediary)
                     {
                         Debug.WriteLine($"Player name: {gamePlayerStats.PlayerName}");
+                        Debug.WriteLine($"Player Blackjacks: {gamePlayerStats.PlayerStatistics.Blackjacks}");
+                        Debug.WriteLine($"Player Wins: {gamePlayerStats.PlayerStatistics.Wins}");
+                        Debug.WriteLine($"Player Ties: {gamePlayerStats.PlayerStatistics.Ties}");
+                        Debug.WriteLine($"Player Losses: {gamePlayerStats.PlayerStatistics.Losses}");
                     }
+
+                    Debug.WriteLine("Dealer Statistics:");
+                    Debug.WriteLine($"Dealer Blackjacks: {game.DealerStatistics.Blackjacks}");
+                    Debug.WriteLine($"Dealer Wins: {game.DealerStatistics.Wins}");
+                    Debug.WriteLine($"Dealer Ties: {game.DealerStatistics.Ties}");
+                    Debug.WriteLine($"Dealer Losses: {game.DealerStatistics.Losses}");
 
                     Debug.WriteLine("");
                 }
