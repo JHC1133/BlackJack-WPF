@@ -60,6 +60,7 @@ namespace BlackJack.MVVM.ViewModel
             {
 
                 _gameManager.UpdateStatistics();
+                _gameManager.UpdateGame();
                 //Application.Current.Shutdown();
 
             });

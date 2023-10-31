@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    [Migration("20231030201420_ThirdMigration")]
-    partial class ThirdMigration
+    [Migration("20231031115333_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,14 +61,38 @@ namespace DAL.Migrations
                     b.Property<DateTime>("DatePlayed")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DealerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("DealerStatisticsName")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ID");
 
+                    b.HasIndex("DealerName");
+
                     b.HasIndex("DealerStatisticsName");
 
                     b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("EL.GamePlayerStatisticsIntermediary", b =>
+                {
+                    b.Property<int>("GameID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PlayerName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("GamePlayerStatisticsID")
+                        .HasColumnType("int");
+
+                    b.HasKey("GameID", "PlayerName");
+
+                    b.HasIndex("PlayerName");
+
+                    b.ToTable("GamePlayerStatisticsIntermediary");
                 });
 
             modelBuilder.Entity("EL.PlayerStatistics", b =>
@@ -82,9 +106,6 @@ namespace DAL.Migrations
                     b.Property<int>("Busts")
                         .HasColumnType("int");
 
-                    b.Property<int?>("GameID")
-                        .HasColumnType("int");
-
                     b.Property<int>("Losses")
                         .HasColumnType("int");
 
@@ -96,8 +117,6 @@ namespace DAL.Migrations
 
                     b.HasKey("PlayerName");
 
-                    b.HasIndex("GameID");
-
                     b.ToTable("PlayerStatistics");
                 });
 
@@ -105,21 +124,49 @@ namespace DAL.Migrations
                 {
                     b.HasOne("EL.DealerStatistics", "DealerStatistics")
                         .WithMany()
+                        .HasForeignKey("DealerName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EL.DealerStatistics", null)
+                        .WithMany("Games")
                         .HasForeignKey("DealerStatisticsName");
 
                     b.Navigation("DealerStatistics");
                 });
 
-            modelBuilder.Entity("EL.PlayerStatistics", b =>
+            modelBuilder.Entity("EL.GamePlayerStatisticsIntermediary", b =>
                 {
-                    b.HasOne("EL.Game", null)
-                        .WithMany("PlayerStatistics")
-                        .HasForeignKey("GameID");
+                    b.HasOne("EL.Game", "Game")
+                        .WithMany("GamePlayerStatisticsIntermediary")
+                        .HasForeignKey("GameID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EL.PlayerStatistics", "PlayerStatistics")
+                        .WithMany("GamesPlayerIntermediary")
+                        .HasForeignKey("PlayerName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("PlayerStatistics");
+                });
+
+            modelBuilder.Entity("EL.DealerStatistics", b =>
+                {
+                    b.Navigation("Games");
                 });
 
             modelBuilder.Entity("EL.Game", b =>
                 {
-                    b.Navigation("PlayerStatistics");
+                    b.Navigation("GamePlayerStatisticsIntermediary");
+                });
+
+            modelBuilder.Entity("EL.PlayerStatistics", b =>
+                {
+                    b.Navigation("GamesPlayerIntermediary");
                 });
 #pragma warning restore 612, 618
         }

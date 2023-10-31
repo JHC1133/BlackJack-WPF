@@ -27,10 +27,19 @@ namespace DAL
                     DealerName = dealerName
                 };
 
-                game.DealerStatistics = new DealerStatistics
+                // Check if the dealer name already exists
+                var existingDealer = context.DealerStatistics.FirstOrDefault(d => d.Name == dealerName);
+                if (existingDealer != null)
                 {
-                    Name = dealerName
-                };
+                    game.DealerStatistics = existingDealer;
+                }
+                else
+                {
+                    game.DealerStatistics = new DealerStatistics
+                    {
+                        Name = dealerName
+                    };
+                }
 
                 foreach (var playerName in playerNames)
                 {
@@ -64,7 +73,7 @@ namespace DAL
                 // Gets the latest (current) game added
                 var game = context.Games
                     .Include(g => g.GamePlayerStatisticsIntermediary)
-                        .ThenInclude(gp => gp.PlayerStatistics)
+                    .ThenInclude(gp => gp.PlayerStatistics)
                     .Include(g => g.DealerStatistics)
                     .OrderByDescending(g => g.DatePlayed)
                     .FirstOrDefault();
@@ -124,6 +133,8 @@ namespace DAL
 
                 context.SaveChanges();
             }
+
+            PrintGameTableContent();
         }
 
         public PlayerStatistics GetPlayerStatistics(string playerName)
@@ -200,7 +211,6 @@ namespace DAL
                 }
 
                 PrintDealerTableContent();
-                PrintGameTableContent();
             }
         }
 
@@ -262,7 +272,26 @@ namespace DAL
 
         private void PrintGameTableContent()
         {
-           
+            using (var context = new GameDbContext())
+            {
+                var games = context.Games.Include(g => g.GamePlayerStatisticsIntermediary).Include(g => g.DealerStatistics).ToList();
+
+                foreach (var game in games)
+                {
+                    Debug.WriteLine($"Game ID: {game.ID}");
+                    Debug.WriteLine($"Date: {game.DatePlayed}");
+                    Debug.WriteLine($"Dealer name: {game.DealerName}");
+
+                    Debug.WriteLine($"Players:");
+
+                    foreach (var gamePlayerStats in game.GamePlayerStatisticsIntermediary)
+                    {
+                        Debug.WriteLine($"Player name: {gamePlayerStats.PlayerName}");
+                    }
+
+                    Debug.WriteLine("");
+                }
+            }
         }
 
         

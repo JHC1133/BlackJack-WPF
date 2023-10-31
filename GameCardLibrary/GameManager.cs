@@ -585,6 +585,15 @@ namespace GameCardLibrary
         }
 
         /// <summary>
+        /// Updates the current game Table through the DAL. This method is to be called at the shutting down of the application
+        /// </summary>
+        public void UpdateGame()
+        {
+            Handler DALhandler = new Handler();
+            DALhandler.UpdateGame();
+        }
+
+        /// <summary>
         /// Gets the current playerStatistics from the DAL and updates them with the current stats
         /// </summary>
         private void UpdatePlayerStatistics()
@@ -666,6 +675,10 @@ namespace GameCardLibrary
             DALhandler.UpdateDealerStatistics(dealerStats);
         }
 
+        /// <summary>
+        /// Removes the selected name from the table with either player- or dealerstatistics
+        /// </summary>
+        /// <param name="playerName"></param>
         public void RemoveFromTable(string playerName)
         {
             Handler DALhandler = new Handler();
