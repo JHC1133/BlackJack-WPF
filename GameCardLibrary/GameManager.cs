@@ -580,7 +580,7 @@ namespace GameCardLibrary
 
             List<string> playerNames = _players.Select(player => player.Name).ToList();
             Handler DALhandler = new Handler();
-            DALhandler.CreateNewGame(playerNames, _dealer.Name);
+            //DALhandler.CreateNewGame(playerNames, _dealer.Name);
             
         }
 
