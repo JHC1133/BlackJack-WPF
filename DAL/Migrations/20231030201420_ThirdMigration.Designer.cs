@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    partial class GameDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231030201420_ThirdMigration")]
+    partial class ThirdMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,32 +61,14 @@ namespace DAL.Migrations
                     b.Property<DateTime>("DatePlayed")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DealerStatisticsName")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("ID");
 
+                    b.HasIndex("DealerStatisticsName");
+
                     b.ToTable("Games");
-                });
-
-            modelBuilder.Entity("EL.GameStatistics", b =>
-                {
-                    b.Property<int>("GameID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PlayerName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("DealerName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ID")
-                        .HasColumnType("int");
-
-                    b.HasKey("GameID", "PlayerName", "DealerName");
-
-                    b.HasIndex("DealerName");
-
-                    b.HasIndex("PlayerName");
-
-                    b.ToTable("GameStatistics");
                 });
 
             modelBuilder.Entity("EL.PlayerStatistics", b =>
@@ -97,6 +82,9 @@ namespace DAL.Migrations
                     b.Property<int>("Busts")
                         .HasColumnType("int");
 
+                    b.Property<int?>("GameID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Losses")
                         .HasColumnType("int");
 
@@ -108,49 +96,30 @@ namespace DAL.Migrations
 
                     b.HasKey("PlayerName");
 
+                    b.HasIndex("GameID");
+
                     b.ToTable("PlayerStatistics");
-                });
-
-            modelBuilder.Entity("EL.GameStatistics", b =>
-                {
-                    b.HasOne("EL.DealerStatistics", "DealerStatistics")
-                        .WithMany("GameStatistics")
-                        .HasForeignKey("DealerName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EL.Game", "Game")
-                        .WithMany("GameStatistics")
-                        .HasForeignKey("GameID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EL.PlayerStatistics", "PlayerStatistics")
-                        .WithMany("GameStatistics")
-                        .HasForeignKey("PlayerName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DealerStatistics");
-
-                    b.Navigation("Game");
-
-                    b.Navigation("PlayerStatistics");
-                });
-
-            modelBuilder.Entity("EL.DealerStatistics", b =>
-                {
-                    b.Navigation("GameStatistics");
                 });
 
             modelBuilder.Entity("EL.Game", b =>
                 {
-                    b.Navigation("GameStatistics");
+                    b.HasOne("EL.DealerStatistics", "DealerStatistics")
+                        .WithMany()
+                        .HasForeignKey("DealerStatisticsName");
+
+                    b.Navigation("DealerStatistics");
                 });
 
             modelBuilder.Entity("EL.PlayerStatistics", b =>
                 {
-                    b.Navigation("GameStatistics");
+                    b.HasOne("EL.Game", null)
+                        .WithMany("PlayerStatistics")
+                        .HasForeignKey("GameID");
+                });
+
+            modelBuilder.Entity("EL.Game", b =>
+                {
+                    b.Navigation("PlayerStatistics");
                 });
 #pragma warning restore 612, 618
         }

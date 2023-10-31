@@ -12,7 +12,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 using Microsoft.IdentityModel.Tokens;
-using Npgsql.Internal.TypeHandlers.DateTimeHandlers;
 
 namespace GameCardLibrary
 {
@@ -120,11 +119,12 @@ namespace GameCardLibrary
             SetNumberOfPlayers(numberOfPlayers);
             SetNumberOfDecks(numberOfDecks);
             InitializeGameDeck(numberOfDecks);
-            //InitializePlayerNames();
             InitializePlayers(numberOfPlayers);
             InitializeDealer();
             InitializeObservableList();
             //GameConditionsCheck();
+
+            CreateNewGame();
         }
 
         /// <summary>
@@ -575,40 +575,13 @@ namespace GameCardLibrary
 
         public void CreateNewGame()
         {
+            UpdatePlayerStatistics();
+            UpdateDealerStatistics();
 
             List<string> playerNames = _players.Select(player => player.Name).ToList();
             Handler DALhandler = new Handler();
             DALhandler.CreateNewGame(playerNames);
             
-        }
-
-        /// <summary>
-        /// Will create PlayerStatistics for the current players, if not already created in their name.
-        /// </summary>
-        private void CreatePlayerStatistics()
-        {
-            Handler DALhandler = new Handler();
-
-            foreach (Player player in _players)
-            {
-                string playerName = player.Name;
-
-                PlayerStatistics playerStats = DALhandler.GetPlayerStatistics(playerName);
-
-                if (playerStats == null)
-                {
-                    // Add
-                    playerStats = new PlayerStatistics
-                    {
-                        PlayerName = playerName,
-                        Wins = player.Wins,
-                        Busts = player.Busts,
-                        Ties = player.Ties,
-                        Losses = player.Losses,
-                        Blackjacks = player.Blackjacks
-                    };
-                }
-            }
         }
 
         /// <summary>

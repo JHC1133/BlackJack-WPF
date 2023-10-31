@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,5 +19,7 @@ namespace EL
         [Key]
         public string PlayerName { get; set; }
 
+        // Navigation property for the join table
+        public List<GameStatistics> GameStatistics { get; set; }
     }
 }

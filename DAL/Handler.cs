@@ -11,28 +11,39 @@ namespace DAL
     public class Handler
     {
 
-        public void AddGame(Game game)
-        {
-            using (var context = new GameDbContext())
-            {
-                context.Games.Add(game);
-                context.SaveChanges();
-            }
-        }
-
         public void CreateNewGame(List<string> playerNames)
         {
             using (var context = new GameDbContext())
             {
                 var playerStatistics = context.PlayerStatistics.Where(stat => playerNames.Contains(stat.PlayerName)).ToList();
+                var dealerStatistics = context.DealerStatistics.FirstOrDefault();
 
                 Game newGame = new Game
                 {
                     DatePlayed = DateTime.Now,
-                    PlayerStatistics = playerStatistics,
-                    DealerStatistics = 
+                    GameStatistics = new List<GameStatistics>()
+                };
+
+                // Associate players with the game
+                foreach (var playerName in playerNames)
+                {
+                    var playerStat = playerStatistics.FirstOrDefault(ps => ps.PlayerName == playerName);
+                    if (playerStat != null)
+                    {
+                        newGame.GameStatistics.Add(new GameStatistics
+                        {
+                            PlayerStatistics = playerStat,
+                            DealerStatistics = dealerStatistics,
+                        });
+                    }
                 }
+
+                context.Games.Add(newGame);
+                context.SaveChanges();
             }
+
+            PrintGameTableContent();
+            Debug.WriteLine("GameTablePrintedAbove");
         }
 
         public PlayerStatistics GetPlayerStatistics(string playerName)
@@ -109,6 +120,7 @@ namespace DAL
                 }
 
                 PrintDealerTableContent();
+                PrintGameTableContent();
             }
         }
 
@@ -165,6 +177,39 @@ namespace DAL
                 Debug.WriteLine($"Losses: {dealerStats.Losses}");
                 Debug.WriteLine($"Blackjacks: {dealerStats.Blackjacks}");
                 Debug.WriteLine("");
+            }
+        }
+
+        private void PrintGameTableContent()
+        {
+            using (var context = new GameDbContext())
+            {
+                var games = context.Games.ToList();
+                foreach (var game in games)
+                {
+                    Debug.WriteLine($"Game ID: {game.ID}");
+                    Debug.WriteLine($"Game Date: {game.DatePlayed}");
+                    Debug.WriteLine("Player Statistics:");
+                    foreach (var gameStat in game.GameStatistics)
+                    {
+                        Debug.WriteLine($"  Player Name: {gameStat.PlayerStatistics.PlayerName}");
+                        Debug.WriteLine($"  Wins: {gameStat.PlayerStatistics.Wins}");
+                        Debug.WriteLine($"  Blackjacks: {gameStat.PlayerStatistics.Blackjacks}");
+                        Debug.WriteLine($"  Busts: {gameStat.PlayerStatistics.Busts}");
+                        Debug.WriteLine($"  Ties: {gameStat.PlayerStatistics.Ties}");
+                        Debug.WriteLine($"  Losses: {gameStat.PlayerStatistics.Losses}");
+                    }
+
+                    foreach (var gameStat in game.GameStatistics)
+                    {
+                        Debug.WriteLine($"Dealer Wins: {gameStat.DealerStatistics.Wins}");
+                        Debug.WriteLine($"Dealer Blackjacks: {gameStat.DealerStatistics.Blackjacks}");
+                        Debug.WriteLine($"Dealer Busts: {gameStat.DealerStatistics.Busts}");
+                        Debug.WriteLine($"Dealer Ties: {gameStat.DealerStatistics.Ties}");
+                        Debug.WriteLine($"Dealer Losses: {gameStat.DealerStatistics.Losses}");
+                    }
+                    
+                }
             }
         }
 

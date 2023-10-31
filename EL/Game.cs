@@ -15,8 +15,21 @@ namespace EL
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public DateTime DatePlayed { get; set; }
-        public DealerStatistics DealerStatistics { get; set; }
-        public ICollection<PlayerStatistics> PlayerStatistics { get; set; }
+
+
+        // Navigation property for the join table
+        public List<GameStatistics> GameStatistics { get; set; }
+
+
+
+        //public DealerStatistics DealerStatistics { get; set; }
+        //public List<PlayerStatistics> PlayerStatistics { get; set; }
+
+        //[ForeignKey("PlayerStatistics")]
+        //public string PlayerName { get; set; }
+
+        //[ForeignKey("DealerStatistics")]
+        //public string Name { get; set; }
 
     }
 }
