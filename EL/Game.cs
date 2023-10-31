@@ -18,9 +18,11 @@ namespace EL
 
         // Navigation properties
 
-        [ForeignKey("PlayerName")]
-        public string PlayerName { get; set; }
-        public List<PlayerStatistics> PlayerStatistics { get; set; }
+        //[ForeignKey("PlayerName")]
+        //public string PlayerName { get; set; }
+
+        // Navigation property
+        public List<GamePlayerStatisticsIntermediary> GamePlayerStatisticsIntermediary { get; set; }
 
         [ForeignKey("Name")]
         public string DealerName { get; set; }

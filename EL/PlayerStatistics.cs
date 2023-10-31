@@ -20,7 +20,7 @@ namespace EL
         public string PlayerName { get; set; }
 
         // Navigation property
-        public List<Game> Games { get; set; }
+        public List<GamePlayerStatisticsIntermediary> GamesPlayerIntermediary { get; set; }
 
     }
 }

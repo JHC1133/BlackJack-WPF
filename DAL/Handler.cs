@@ -34,7 +34,12 @@ namespace DAL
 
                 foreach (var playerName in playerNames)
                 {
-                    game.PlayerStatistics.Add(new PlayerStatistics
+                    if (game.GamePlayerStatisticsIntermediary == null)
+                    {
+                        game.GamePlayerStatisticsIntermediary = new List<GamePlayerStatisticsIntermediary>();
+                    }
+
+                    game.GamePlayerStatisticsIntermediary.Add(new GamePlayerStatisticsIntermediary
                     {
                         PlayerName = playerName
                     });
@@ -54,7 +59,15 @@ namespace DAL
             using (var context = new GameDbContext())
             {
                 // Gets the latest (current) game added
-                var game = context.Games.Include(g => g.PlayerStatistics).Include(g => g.DealerStatistics).OrderByDescending(g => g.DatePlayed).FirstOrDefault();
+                //var game = context.Games.Include(g => g.PlayerStatistics).Include(g => g.DealerStatistics).OrderByDescending(g => g.DatePlayed).FirstOrDefault();
+
+                // Gets the latest (current) game added
+                var game = context.Games
+                    .Include(g => g.GamePlayerStatisticsIntermediary)
+                        .ThenInclude(gp => gp.PlayerStatistics)
+                    .Include(g => g.DealerStatistics)
+                    .OrderByDescending(g => g.DatePlayed)
+                    .FirstOrDefault();
 
                 if (game == null)
                 {
@@ -62,21 +75,36 @@ namespace DAL
                     return;
                 }
 
-
-                foreach (var playerStats in game.PlayerStatistics)
+                foreach (var gamePlayerStats in game.GamePlayerStatisticsIntermediary)
                 {
-                    var playerName = playerStats.PlayerName;
+                    var playerName = gamePlayerStats.PlayerName;
                     var updatedPlayerStats = GetPlayerStatistics(playerName);
 
                     if (updatedPlayerStats != null)
                     {
-                        playerStats.Wins = updatedPlayerStats.Wins;
-                        playerStats.Blackjacks = updatedPlayerStats.Blackjacks;
-                        playerStats.Busts = updatedPlayerStats.Busts;
-                        playerStats.Losses = updatedPlayerStats.Losses;
-                        playerStats.Ties = updatedPlayerStats.Ties;
+                        // Update player statistics
+                        gamePlayerStats.PlayerStatistics.Wins = updatedPlayerStats.Wins;
+                        gamePlayerStats.PlayerStatistics.Blackjacks = updatedPlayerStats.Blackjacks;
+                        gamePlayerStats.PlayerStatistics.Busts = updatedPlayerStats.Busts;
+                        gamePlayerStats.PlayerStatistics.Losses = updatedPlayerStats.Losses;
+                        gamePlayerStats.PlayerStatistics.Ties = updatedPlayerStats.Ties;
                     }
                 }
+
+                //foreach (var playerStats in game.GamePlayerStatisticsIntermediary)
+                //{
+                //    var playerName = playerStats.PlayerName;
+                //    var updatedPlayerStats = GetPlayerStatistics(playerName);
+
+                //    if (updatedPlayerStats != null)
+                //    {
+                //        playerStats.Wins = updatedPlayerStats.Wins;
+                //        playerStats.Blackjacks = updatedPlayerStats.Blackjacks;
+                //        playerStats.Busts = updatedPlayerStats.Busts;
+                //        playerStats.Losses = updatedPlayerStats.Losses;
+                //        playerStats.Ties = updatedPlayerStats.Ties;
+                //    }
+                //}
 
                 var dealerStats = game.DealerStatistics;
 

@@ -15,6 +15,7 @@ namespace DAL
         public DbSet<PlayerStatistics> PlayerStatistics { get; set; }
         public DbSet<DealerStatistics> DealerStatistics { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<GamePlayerStatisticsIntermediary> GamePlayerStatisticsIntermediary { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,11 +29,32 @@ namespace DAL
 
             modelBuilder.Entity<Game>().Property(g => g.ID).ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Game>().HasKey(g => g.ID);
+            // Configure the Game entity
+            modelBuilder.Entity<Game>()
+                .HasKey(g => g.ID);
 
-            //modelBuilder.Entity<Game>().HasOne(g => g.PlayerStatistics).WithMany(ps => ps.Games).HasForeignKey(g => g.PlayerName);
+            modelBuilder.Entity<Game>()
+                .HasOne(g => g.DealerStatistics)
+                .WithMany()
+                .HasForeignKey(g => g.DealerName);
 
-            modelBuilder.Entity<Game>().HasOne(g => g.DealerStatistics).WithMany(ds => ds.Games).HasForeignKey(g => g.DealerName);
+            // Configure the PlayerStatistics entity
+            modelBuilder.Entity<PlayerStatistics>()
+                .HasKey(ps => ps.PlayerName);
+
+            // Configure the many-to-many relationship using the intermediary entity
+            modelBuilder.Entity<GamePlayerStatisticsIntermediary>()
+                .HasKey(gps => new { gps.GameID, gps.PlayerName });
+
+            modelBuilder.Entity<GamePlayerStatisticsIntermediary>()
+                .HasOne(gps => gps.Game)
+                .WithMany(g => g.GamePlayerStatisticsIntermediary)
+                .HasForeignKey(gps => gps.GameID);
+
+            modelBuilder.Entity<GamePlayerStatisticsIntermediary>()
+                .HasOne(gps => gps.PlayerStatistics)
+                .WithMany(ps => ps.GamesPlayerIntermediary)
+                .HasForeignKey(gps => gps.PlayerName);
 
             base.OnModelCreating(modelBuilder);
         }
