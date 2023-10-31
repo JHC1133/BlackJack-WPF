@@ -130,6 +130,10 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Updates playerstats if exisiting, if not adds them to a new row in the table
+        /// </summary>
+        /// <param name="playerStats"></param>
         public void UpdatePlayerStatistics(PlayerStatistics playerStats)
         {
 
@@ -169,6 +173,10 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Updates dealerStats if exisiting, if not adds them to a new row in the table
+        /// </summary>
+        /// <param name="dealerStats"></param>
         public void UpdateDealerStatistics(DealerStatistics dealerStats)
         {
 
@@ -197,6 +205,10 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Takes the player name (can also be the dealer name) and removes it from either the playerStatistics or dealerStatistics table. As the names are the primary key for the tables.
+        /// </summary>
+        /// <param name="playerName"></param>
         public void RemoveItemFromTable(string playerName)
         {
             using (var context = new GameDbContext())
@@ -233,6 +245,30 @@ namespace DAL
 
                         PrintPlayerTableContent();
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes a row from the Game table, using the gameID primary key
+        /// </summary>
+        /// <param name="gameID"></param>
+        public void RemoveItemFromTable(int gameID)
+        {
+            using (var context = new GameDbContext())
+            {
+
+                var gameToRemove = (from game in context.Games
+                                    where game.ID == gameID
+                                    select game).SingleOrDefault();
+
+                if (gameToRemove != null)
+                {
+                    context.Games.Remove(gameToRemove);
+                    context.SaveChanges();
+
+                    Debug.WriteLine($"{gameToRemove} has been removed from the table");
+                    PrintGameTableContent();
                 }
             }
         }
