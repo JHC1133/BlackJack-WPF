@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EL
 {
-    public class PlayerStatistics
+    public class PlayerStatistics 
     {
         public int Wins { get; set; }
         public int Blackjacks { get; set; }
