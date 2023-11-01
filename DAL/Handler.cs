@@ -71,6 +71,7 @@ namespace DAL
             {             
 
                 // Gets the latest (current) game added
+                // .ThenInclude used for getting to PlayerStatistics via the GamePlayerStatIntermediary
                 var game = context.Games
                     .Include(g => g.GamePlayerStatisticsIntermediary)
                     .ThenInclude(gp => gp.PlayerStatistics)
@@ -139,6 +140,10 @@ namespace DAL
 
         #region Player
 
+        /// <summary>
+        /// Returns playerStatistics from the database as a list. Used for DataGridView in UI
+        /// </summary>
+        /// <returns></returns>
         public List<PlayerStatistics> GetPlayers()
         {
             using (var context = new GameDbContext())
@@ -153,7 +158,11 @@ namespace DAL
             }
         }
 
-
+        /// <summary>
+        /// Returns PlayerStatistics from the database for the playerName input
+        /// </summary>
+        /// <param name="playerName"></param>
+        /// <returns></returns>
         public PlayerStatistics GetPlayerStatistics(string playerName)
         {
             using (var context = new GameDbContext())
@@ -200,6 +209,10 @@ namespace DAL
 
         #region Dealer
 
+        /// <summary>
+        /// Returns the DealerStatistics as a list. Used for the DataGridView in the UI
+        /// </summary>
+        /// <returns></returns>
         public List<DealerStatistics> GetDealer()
         {
             using (var context = new GameDbContext())
@@ -208,6 +221,10 @@ namespace DAL
             }
         }
 
+        /// <summary>
+        /// Returns the DealerStatistics
+        /// </summary>
+        /// <returns></returns>
         public DealerStatistics GetDealerStatistics()
         {
             using (var context = new GameDbContext()) 

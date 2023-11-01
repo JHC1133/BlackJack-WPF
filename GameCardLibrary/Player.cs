@@ -19,24 +19,6 @@ namespace GameCardLibrary
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private string[] _nameArray =
-        {
-            "Joar",
-            "Farid",
-            "Wilmer",
-            "Simon",
-            "Marco",
-            "Brandon",
-            "Kristoffer",
-            "Dick",
-            "Jose",
-            "Kevin",
-            "Sofia",
-            "Gorm",
-            "Zeke",
-            "McThundertits"
-        };
-
         private string _name;
         private string _stateText;
         private Hand _hand;
@@ -72,20 +54,6 @@ namespace GameCardLibrary
             _name = name;
             _hand = hand;
         }
-
-        private string RandomizeName()
-        {
-            Random rand = new Random();
-            int i = rand.Next(0, _nameArray.Length - 1);
-            string s = _nameArray[i];
-            return s;
-        }
-
-        public void SetPlayerHand(Deck deck)
-        {
-            
-        }
-
 
         public override string ToString()
         {

@@ -20,7 +20,7 @@ namespace GameCardLibrary
         /// <returns></returns>
         public bool IsBust(Hand hand)
         {
-            if (hand.Score > bustValue)
+            if (hand.Score >= bustValue)
             {
                 return true;
             }

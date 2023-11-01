@@ -107,14 +107,6 @@
 
             </Button>
 
-            <DataGrid Width="300"
-                      Height="200"
-                      Margin="20,50,0,0"
-                      HorizontalAlignment="Left"
-                      ItemsSource="{Binding Games}">
-                
-            </DataGrid>
-            
         </StackPanel>
     </Grid>
 </UserControl>

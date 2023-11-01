@@ -35,6 +35,9 @@ namespace GameCardLibrary
         // Lambda statement
         private string PlayerName => RandomizeNameFunc(NameList);
 
+        /// <summary>
+        /// Takes a List<string> and returns a string
+        /// </summary>
         private Func<List<string>, string> RandomizeNameFunc = (nameList) =>
         {
             if (nameList.Count == 0)
@@ -558,7 +561,7 @@ namespace GameCardLibrary
                     player.Losses++;
                     _dealer.Wins++;
                 }
-                else if (check.IsBust(_dealer.Hand))
+                else if (check.IsBust(_dealer.Hand) && !check.IsBust(player.Hand))
                 {
                     DealerBustEvent?.Invoke(this, EventArgs.Empty);
                     player.StateText = State.Winner.ToString();
@@ -574,13 +577,14 @@ namespace GameCardLibrary
 
         #endregion
 
-
         #region DALCommunications
 
+        /// <summary>
+        /// Creates a new game row in the Game table via the DAL
+        /// </summary>
         public void CreateNewGame()
         {
-            UpdatePlayerStatistics();
-            UpdateDealerStatistics();
+            UpdateStatistics();
 
             List<string> playerNames = _players.Select(player => player.Name).ToList();
             Handler DALhandler = new Handler();
@@ -597,18 +601,30 @@ namespace GameCardLibrary
             DALhandler.UpdateGame();
         }
 
+        /// <summary>
+        /// Used for DataGridView in the UI
+        /// </summary>
+        /// <returns></returns>
         public List<Game> GetGames()
         {
             Handler DALhandler = new Handler();
             return DALhandler.GetGames();
         }
 
+        /// <summary>
+        /// Used for DataGridView in the UI
+        /// </summary>
+        /// <returns></returns>
         public List<PlayerStatistics> GetPlayers()
         {
             Handler DALhandler = new Handler();
             return DALhandler.GetPlayers();
         }
 
+        /// <summary>
+        /// Used for DataGridView in the UI
+        /// </summary>
+        /// <returns></returns>
         public List<DealerStatistics> GetDealer()
         {
             Handler DALhandler = new Handler();

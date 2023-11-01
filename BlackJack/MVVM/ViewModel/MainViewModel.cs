@@ -22,6 +22,7 @@ namespace BlackJack.MVVM.ViewModel
         public RelayCommand QuitCommand { get; set; }
         public RelayCommand StatsViewCommand { get; set; }
 
+
         public StatsViewModel StatsVM { get; set; }
         public OptionsViewModel OptionsVM { get; set; }
         public PlayViewModel PlayVM { get; set; }

@@ -34,31 +34,31 @@ namespace BlackJack.MVVM.View
             DataContext = new OptionsViewModel();
         }
 
-        private bool IsOptionsTextBoxesFilled()
-        {
-            if (txtNumberOfDecks.Text != null && txtNumberOfPlayers.Text != null)
-            {
-                return true;
-            }
-            return false;
-        }
+        //private bool IsOptionsTextBoxesFilled()
+        //{
+        //    if (txtNumberOfDecks.Text != null && txtNumberOfPlayers.Text != null)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
-        private bool TryParseOptionsTextBoxes(out int numberOfDecks, out int numberOfPlayers)
-        {
-            numberOfDecks = 0;
-            numberOfPlayers = 0;
+        //private bool TryParseOptionsTextBoxes(out int numberOfDecks, out int numberOfPlayers)
+        //{
+        //    numberOfDecks = 0;
+        //    numberOfPlayers = 0;
 
-            return !string.IsNullOrEmpty(txtNumberOfDecks.Text) &&
-                   !string.IsNullOrEmpty(txtNumberOfPlayers.Text) &&
-                   helper.StringToInt(txtNumberOfDecks.Text, out numberOfDecks) &&
-                   helper.StringToInt(txtNumberOfPlayers.Text, out numberOfPlayers);
-        }
+        //    return !string.IsNullOrEmpty(txtNumberOfDecks.Text) &&
+        //           !string.IsNullOrEmpty(txtNumberOfPlayers.Text) &&
+        //           helper.StringToInt(txtNumberOfDecks.Text, out numberOfDecks) &&
+        //           helper.StringToInt(txtNumberOfPlayers.Text, out numberOfPlayers);
+        //}
 
-        private void ClearTextBoxes()
-        {
-            txtNumberOfDecks.Clear();
-            txtNumberOfPlayers.Clear();
-        }
+        //private void ClearTextBoxes()
+        //{
+        //    txtNumberOfDecks.Clear();
+        //    txtNumberOfPlayers.Clear();
+        //}
 
         private void btnOptionsSave_Click(object sender, RoutedEventArgs e)
         {
@@ -87,10 +87,7 @@ namespace BlackJack.MVVM.View
 
             ((OptionsViewModel)DataContext).SaveCommand.Execute(null);
 
-            if (cbNameList != null)
-            {
 
-            }
 
         }
     }

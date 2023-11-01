@@ -38,11 +38,11 @@ namespace DAL
                 .WithMany()
                 .HasForeignKey(g => g.DealerName);
 
-            // Configure the PlayerStatistics entity
+            // PlayerStatistics entity
             modelBuilder.Entity<PlayerStatistics>()
                 .HasKey(ps => ps.PlayerName);
 
-            // Configure the many-to-many relationship using the intermediary entity
+            // Many-to-many relationship using the intermediary entity
             modelBuilder.Entity<GamePlayerStatisticsIntermediary>()
                 .HasKey(gps => new { gps.GameID, gps.PlayerName });
 
