@@ -12,7 +12,6 @@ namespace EL
     {
         // Autogenerates an ID everytime a Game gets added to the DB
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public DateTime DatePlayed { get; set; }
 

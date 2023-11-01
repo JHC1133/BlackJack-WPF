@@ -131,8 +131,12 @@ namespace DAL
         {
             using (var context = new GameDbContext())
             {
-                //return context.Games.ToList();
-                return context.Games.Include(g => g.GamePlayerStatisticsIntermediary).Include(g => g.DealerStatistics).ToList();
+
+                return context.Games
+                    .Include(g => g.GamePlayerStatisticsIntermediary)
+                    .ThenInclude(gp => gp.PlayerStatistics)
+                    .Include(g => g.DealerStatistics)
+                    .ToList();
             }
         }
 
@@ -148,13 +152,7 @@ namespace DAL
         {
             using (var context = new GameDbContext())
             {
-                return context.PlayerStatistics.ToList();
-
-                //return context.GamePlayerStatisticsIntermediary
-                //      .Include(gp => gp.Game)
-                //      .Include(gp => gp.PlayerStatistics)
-                //      .Where(gp => gp.Game == selectedGame)
-                //      .ToList();
+                return context.PlayerStatistics.Include(g => g.GamesPlayerIntermediary).ToList();
             }
         }
 
@@ -217,7 +215,7 @@ namespace DAL
         {
             using (var context = new GameDbContext())
             {
-                return context.DealerStatistics.ToList();
+                return context.DealerStatistics.Include(g => g.Games).ToList();
             }
         }
 
