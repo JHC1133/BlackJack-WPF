@@ -29,7 +29,7 @@ namespace DAL
 
             modelBuilder.Entity<Game>().Property(g => g.ID).ValueGeneratedOnAdd();
 
-            // Configure the Game entity
+            // Game entity
             modelBuilder.Entity<Game>()
                 .HasKey(g => g.ID);
 
