@@ -12,3 +12,6 @@ Additionally, the project integrates:
 - LINQ expressions for efficient data querying.
 - NuGet package management via PowerShell commands.
 - Interfaces with Generics to ensure flexible, reusable components across the application.
+
+
+![blackjackWPF](https://github.com/user-attachments/assets/53abceed-f1f1-4a8b-98c0-dc3292afc2b3)
